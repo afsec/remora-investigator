@@ -1,0 +1,16 @@
+[package]
+authors = ["Antonio Costa - https://gitlab.com/acosta42"]
+edition = "2018"
+license = "MIT"
+name = "mvp-scaffold"
+version = "0.1.0"
+
+[dependencies]
+log = {version = "0.4.14", features = ["kv_unstable", "std"]}
+r2d2 = "0.8.9"
+r2d2_sqlite = "0.18.0"
+tide = "0.16.0"
+
+[dependencies.rusqlite]
+features = ['bundled']
+version = '0.25.3'

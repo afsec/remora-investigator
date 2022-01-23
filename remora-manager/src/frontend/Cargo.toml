@@ -1,0 +1,10 @@
+[package]
+authors = ["Antonio Costa - https://gitlab.com/acosta42"]
+edition = "2018"
+license = "MIT"
+name = "frontend"
+version = "0.1.93"
+
+[dependencies]
+log = {version = "0.4.14", features = ["kv_unstable", "std"]}
+tide = "0.16.0"

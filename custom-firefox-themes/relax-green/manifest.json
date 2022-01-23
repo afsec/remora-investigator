@@ -1,0 +1,58 @@
+{
+  "manifest_version": 2,
+  "version": "1.0.1",
+  "name": "Relax Green",
+  "applications":{
+  "gecko": {
+  "id": "gitlab:afsec/relax-green"
+  }
+  },
+  
+  "theme": {
+    "images": {},
+    "properties": {},
+    "colors": {
+
+      "frame": "black",
+      "frame_inactive": "#252525",
+      
+      "tab_background_text": "#3aa757",
+      "tab_background_separator": "black",
+      
+      "button_background_hover": "black",
+      
+      "tab_line": "#3aa757",
+      "tab_text":"black",
+      "tab_selected": "#3aa757",
+      "tab_loading": "#3aa757",
+      
+      "toolbar": "black",
+      "toolbar_text": "#3aa757",
+      "toolbar_field": "black",
+      "toolbar_field_text": "#3aa757",
+      "toolbar_field_border": "#3aa757",
+      "toolbar_bottom_seperator": "#3aa757",
+      "toolbar_field_focus": "black",
+      "toolbar_field_highlight": "#3aa757",
+      "toolbar_field_highlight_text": "black",
+      "toolbar_field_border_focus": "#3aa757",
+      "toolbar_vertical_separator": "black",
+      
+      "popup": "black",
+      "popup_text": "#3aa757",
+      "popup_highlight": "#3aa757",
+      "popup_highlight_text": "black",
+      "popup_border": "#3aa757",
+     
+      
+      "sidebar": "black",
+      "sidebar_text": "#3aa757",
+      "sidebar_highlight": "#3aa757",
+      "sidebar_highlight_text": "black",
+      "sidebar_border": "#3aa757",
+      
+      "ntp_background": "black",
+      "ntp_text": "white"
+      }
+  }
+}

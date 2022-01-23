@@ -1,0 +1,36 @@
+{
+    "name": "Remora Investigator",
+    "short_name": "Remora",
+    "description": "A Security tool for analyze for Web Applications",
+    "version": "1.2",
+    "manifest_version": 2,
+    "author": "acosta42",
+    "homepage_url": "https://github.com/afsec/remora-investigator",
+    "browser_specific_settings": {
+        "gecko": {
+          "id": "{89b002e9-5db9-58c9-9dfe-a05193cf41dd}",
+          "strict_min_version": "92.0"
+        }
+      },
+    "icons": {
+        "128": "icons/logo-green.png"
+    },
+    "background": {
+        "scripts": [
+            "background/wasm/background.js",
+            "background/firefox-api.js",
+            "background/bg-loader.js"
+        ]
+    },
+    "devtools_page": "devtools/devtools.html",
+    "permissions": [
+        "storage",
+        "contextMenus"
+    ],
+    "options_ui": {
+        "page": "options/options.html"
+    },
+    "browser_action": {
+        "default_title": "Remora Investigator"   
+    }
+}

@@ -1,0 +1,11 @@
+[workspace]
+
+members = [
+	"src/application-endpoints",
+	"src/application-models",
+	"src/databases",
+	"src/frontend",
+	"src/launcher",
+	"src/mvp-scaffold",
+	"src/web-server",
+]
