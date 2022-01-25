@@ -64,3 +64,7 @@ $ ./remora-manager
 - **Firefox Developer Edition** - https://www.mozilla.org/en-US/firefox/developer/
 
 **Explanation and Help on setting `xpinstall.signatures.required` flag on `about:config`:** https://support.mozilla.org/en-US/kb/add-on-signing-in-firefox?as=u&utm_source=inproduct#w_what-are-my-options-if-i-want-to-use-an-unsigned-add-on-advanced-users
+
+## References
+
+- *Burp is detectable and could be diverted:* https://www.dustri.org/b/detecting-and-annoying-burp-users.html
