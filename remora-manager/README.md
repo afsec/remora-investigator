@@ -1,6 +1,6 @@
 # brickpack-2021
 
-[![dependency status](https://deps.rs/repo/gitlab/acosta42/brickpack-2021/status.svg)](https://deps.rs/repo/gitlab/acosta42/brickpack-2021)
+[![dependency status](https://deps.rs/repo/github/afsec/brickpack/status.svg)](https://deps.rs/repo/github/afsec/brickpack)
 
 ## How it works
 
@@ -94,7 +94,7 @@ $
 ```
 $ ./tide-crud-users -h
 BrickPack 0.1.92
-Antonio Costa - https://gitlab.com/acosta42
+Antonio Costa - https://github.com/afsec
 
 
 USAGE:

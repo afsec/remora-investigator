@@ -1,5 +1,5 @@
 [package]
-authors = ["Antonio Costa - https://gitlab.com/acosta42"]
+authors = ["Antonio Costa - https://github.com/afsec"]
 edition = "2018"
 license = "MIT"
 name = "frontend"

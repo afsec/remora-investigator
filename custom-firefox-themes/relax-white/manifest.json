@@ -4,7 +4,7 @@
   "name": "Relax White",
   "applications":{
   "gecko": {
-  "id": "gitlab:afsec/relax-white"
+  "id": "github:afsec/relax-white"
   }
   },
   

@@ -4,7 +4,7 @@
     "description": "A Security tool for analyze for Web Applications",
     "version": "1.2",
     "manifest_version": 2,
-    "author": "acosta42",
+    "author": "afsec",
     "homepage_url": "https://github.com/afsec/remora-investigator",
     "browser_specific_settings": {
         "gecko": {
