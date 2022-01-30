@@ -5,7 +5,11 @@ Remora Investigator is a Firefox extension that helps you to stealthily investig
 
 You can take notes, do a full-text-search on the entire session, download artifacts, or simply registry the interactive activities between states of a Web Applications and its backend's traffic.
 
+## Quoted in
+- **AppSecEzine #415 - jan/2022**: https://github.com/Simpsonpt/AppSecEzine/blob/master/Ezines/415%20-%20AppSec%20Ezine#L57-L58
 
+
+## Screenshot
 ![Remora Screenshot](/doc/img/remora.png "Remora Investigator")
 
 
