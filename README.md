@@ -71,4 +71,4 @@ $ ./remora-manager
 
 ## References
 
-- *Burp is detectable and could be diverted:* https://www.dustri.org/b/detecting-and-annoying-burp-users.html
+- *Burp is detectable and can be diverted:* https://www.dustri.org/b/detecting-and-annoying-burp-users.html
