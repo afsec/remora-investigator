@@ -17,7 +17,7 @@ RUN apt -yqq install --no-install-recommends \
     libwebkit2gtk-4.0-dev \
     libgtk-3-dev \
     libayatana-appindicator3-dev \
-    librsvg2-dev
+    librsvg2-dev file
 
 RUN npm install -g npm@latest http-server uglify-js
 

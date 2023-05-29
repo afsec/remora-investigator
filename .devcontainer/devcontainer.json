@@ -42,7 +42,8 @@
 				"aaron-bond.better-comments",
 				"rust-lang.rust-analyzer",
 				"serayuzgur.crates",
-				"tamasfe.even-better-toml"
+				"tamasfe.even-better-toml",
+				"svelte.svelte-vscode"
 			],
 			"settings": {
 				"editor.formatOnSave": true,
