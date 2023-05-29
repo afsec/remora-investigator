@@ -1,0 +1,21 @@
+[package]
+publish = false
+edition = "2021"
+rust-version = "1.69.0"
+
+name = "design-scaffold"
+version = "0.0.8"
+
+authors = ["https://github.com/afsec"]
+license = "MIT"
+
+
+[dependencies]
+anyhow = { workspace = true }
+tracing = { workspace = true }
+tokio = { workspace = true }
+chrono = { workspace = true }
+
+sha2 = "0.10.6"
+ulid = "1.0.0"
+rand = "0.8.5"

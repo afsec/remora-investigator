@@ -1,0 +1,18 @@
+[package]
+publish = false
+name = "web-debugger"
+version = "0.1.0"
+edition = "2021"
+
+
+[dependencies]
+anyhow = "1.0.71"
+base64 = "0.21.2"
+chromiumoxide = { git = "https://github.com/mattsse/chromiumoxide", branch = "main", default-features = false, features = [
+    "tokio",
+    "tokio-runtime",
+] }
+futures = "0.3.28"
+tokio = { version = "1.28.2", features = ["full"] }
+tracing = "0.1.37"
+tracing-subscriber = { version = "0.3.17", features = ["env-filter"] }

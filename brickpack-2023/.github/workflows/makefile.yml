@@ -1,0 +1,56 @@
+name: Makefile CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  rustfmt:
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Cache cargo registry
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+        key: ${{ runner.os }}-${{ matrix.backend }}-cargo-${{ hashFiles('**/Cargo.toml') }}
+
+    - uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        components: rustfmt
+        override: true
+    - run: cargo fmt -- --check
+    
+  build:
+    needs: rustfmt
+    runs-on: ubuntu-22.04
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Cache cargo registry
+      uses: actions/cache@v2
+      with:
+        path: |
+          ~/.cargo/registry
+          ~/.cargo/git
+        key: ${{ runner.os }}-${{ matrix.backend }}-cargo-${{ hashFiles('**/Cargo.toml') }}
+
+    - name: Install dependencies
+      run: make depend     
+     
+    - name: Build project
+      run: make release
+    
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: brickpack-2023
+        path: ./dist/release/brickpack-2023
+        retention-days: 5

@@ -1,0 +1,56 @@
+{
+	"name": "brickpack_2023",
+	"runArgs": [
+		"--name",
+        	"brickpack_2023",
+		"-e",
+		"TERM=xterm-256color",
+		"-e",
+		"DIST_POST=5000"
+	],
+	"build": {
+		"dockerfile": "Dockerfile",
+		"context": "..",
+		"args": {}
+	},
+	"remoteUser": "node",
+	"updateRemoteUserUID": true,
+	"waitFor": "onCreateCommand",
+	// "initializeCommand": "touch initializeCommand.dat",
+	"onCreateCommand": ".devcontainer/user_setup.sh",
+	// "updateContentCommand": "touch updateContentCommand.dat ",
+	// "postCreateCommand": "touch postCreateCommand.dat",
+	// "postStartCommand": "touchpostStartCommand.dat",
+	// "postAttachCommand": "touch postAttachCommand.dat",
+	// "forwardPorts": [
+	// 	4000
+	// ],
+	// "portsAttributes": {
+	// 	"4000": {
+	// 		"label": "Frontend listenning at 4000",
+	// 		"onAutoForward": "notify"
+	// 	}
+	// },
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-vscode-remote.remote-containers",
+				"yzhang.markdown-all-in-one",
+				"vivaxy.vscode-conventional-commits",
+				"skellock.just",
+				"usernamehw.errorlens",
+				"aaron-bond.better-comments",
+				"rust-lang.rust-analyzer",
+				"serayuzgur.crates",
+				"tamasfe.even-better-toml"
+			],
+			"settings": {
+				"editor.formatOnSave": true,
+				"editor.fontWeight": "bold",
+				"workbench.colorTheme": "Default Dark+",
+				"workbench.preferredDarkColorTheme": "Monokai",
+				"explorer.compactFolders": false
+			}
+		}
+	}
+}

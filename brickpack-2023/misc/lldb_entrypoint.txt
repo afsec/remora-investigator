@@ -1,0 +1,6 @@
+lldb cargo run
+
+(lldb) env RUST_LOG=hello=trace
+(lldb) breakpoint set --name hello::main
+(lldb) run
+

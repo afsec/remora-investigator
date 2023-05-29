@@ -1,0 +1,28 @@
+[package]
+publish = false
+edition = "2021"
+rust-version = "1.69.0"
+
+name = "launcher"
+version = "0.1.2"
+description = "Just another updated version of Brickpack scaffold system for Rust"
+authors = ["https://github.com/afsec"]
+license = "MIT"
+
+
+[[bin]]
+name = "brickpack-2023"
+path = "src/main.rs"
+
+
+[dependencies]
+design-scaffold = { path = "../design-scaffold" }
+web-server = { path = "../web-server" }
+
+anyhow = { workspace = true }
+clap = { workspace = true }
+tracing = { workspace = true }
+tokio = { workspace = true }
+
+tracing-subscriber = { version = "0.3.17", features = ["env-filter"] }
+console-subscriber = "0.1.9"

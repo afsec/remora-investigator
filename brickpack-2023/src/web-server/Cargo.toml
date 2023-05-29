@@ -1,0 +1,28 @@
+[package]
+publish = false
+edition = "2021"
+rust-version = "1.69.0"
+
+name = "web-server"
+version = "0.0.6"
+
+authors = ["https://github.com/afsec"]
+license = "MIT"
+
+[dependencies]
+anyhow = { workspace = true }
+clap = { workspace = true }
+serde = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
+
+design-scaffold = { path = "../design-scaffold" }
+
+axum = { version = "0.6.18", features = [
+    "tracing",
+    "ws",
+    "http2",
+    "headers",
+    "multipart",
+] }
+hostname-validator = "1.1.1"

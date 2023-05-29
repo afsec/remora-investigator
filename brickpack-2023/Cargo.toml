@@ -1,0 +1,64 @@
+[workspace]
+
+
+members = [
+    "src/design-scaffold",
+    "src/launcher",
+    "src/web-server",
+    "src/web-ui",
+]
+
+
+default-members = ["src/launcher"]
+
+exclude = ["applet_filename_fuzzer"]
+
+# TODO: Could implement metadata to build frontend artifacts (Elm).
+# TODO: Must check if will be helpful to use some build-system convention.
+[workspace.metadata.webui]
+root = "src/web-ui"
+tool = "../misc/elm"
+
+# [workspace.metadata.somecontent]
+# root = "path/to/webproject"
+# tool = ["npm", "run", "build"]
+
+# ATTENTION: The `workspace.metadata` table is ignored by Cargo and will not warn about it.
+
+
+[workspace.dependencies]
+anyhow = "1.0.71"
+chrono = { version = "0.4.24", default-features = false, features = [
+    "serde",
+    "clock",
+] }
+clap = { version = "4.2.7", features = ["cargo", "env"] }
+serde = { version = "1.0.163", features = ["derive"] }
+tokio = { version = "1.28.1", features = ["full", "tracing"] }
+tracing = "0.1.37"
+
+
+[profile.dev]
+opt-level = 0
+lto = false
+debug = true
+debug-assertions = true
+
+[profile.release]
+opt-level = 3
+lto = true
+debug = false
+debug-assertions = false
+strip = true
+
+[profile.bench]
+opt-level = 3
+lto = true
+debug = false
+debug-assertions = false
+
+[profile.test]
+opt-level = 0
+lto = false
+debug = true
+debug-assertions = true

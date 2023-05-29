@@ -1,0 +1,15 @@
+[build]
+
+target = "x86_64-unknown-linux-musl"
+
+# Required by tracing with console-subscriber
+rustflags = ["--cfg", "tokio_unstable"]
+
+# [net]
+#  offline = true
+
+# [source.crates-io]
+# replace-with = "vendored-sources"
+
+# [source.vendored-sources]
+# directory = "vendor"
