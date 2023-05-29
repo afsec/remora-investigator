@@ -5,26 +5,34 @@ use chromiumoxide::cdp::browser_protocol::fetch::{
     self, ContinueRequestParams, EventRequestPaused, FailRequestParams, FulfillRequestParams,
 };
 use chromiumoxide::cdp::browser_protocol::network::{
-    self, ErrorReason, EventRequestWillBeSent, ResourceType,
+    self, ErrorReason, EventRequestWillBeSent, EventResponseReceived, ResourceType,
 };
 
 use chromiumoxide::Page;
 use futures::{select, StreamExt};
 use std::collections::HashMap;
 use std::sync::Arc;
+use tokio::sync::Mutex;
 
 const CONTENT: &str = "<html><head><meta http-equiv=\"refresh\" content=\"0;URL='http://www.example.com/'\" /></head><body><h1>TEST</h1></body></html>";
 const TARGET: &str = "http://google.com/";
 
-pub struct Interceptor;
+pub struct Interceptor {
+    state: Arc<Mutex<u64>>,
+}
 
 impl Interceptor {
-    pub async fn launch() -> Result<(), Box<dyn std::error::Error>> {
-        launch_inteceptor().await
+    pub fn new() -> Self {
+        Self {
+            state: Arc::new(Mutex::new(0)),
+        }
+    }
+    pub async fn launch(self) -> Result<(), Box<dyn std::error::Error>> {
+        launch_inteceptor(self).await
     }
 }
 
-async fn launch_inteceptor() -> Result<(), Box<dyn std::error::Error>> {
+async fn launch_inteceptor(ctx: Interceptor) -> Result<(), Box<dyn std::error::Error>> {
     tracing_subscriber::fmt::init();
 
     let (browser, mut handler) = Browser::launch(
@@ -57,11 +65,41 @@ async fn launch_inteceptor() -> Result<(), Box<dyn std::error::Error>> {
             .await
             .unwrap()
             .fuse();
+        let mut response_received = page
+            .event_listener::<EventResponseReceived>()
+            .await
+            .unwrap()
+            .fuse();
+
         let intercept_page = page.clone();
+        let event_counter_arc_mutex: Arc<Mutex<u64>> = ctx.state.clone();
+
         let intercept_handle = tokio::task::spawn(async move {
             let mut resolutions: HashMap<network::RequestId, InterceptResolution> = HashMap::new();
             loop {
                 select! {
+                  event = response_received.next() => {
+                        if let Some(event) = event {
+                            let mut event_counter_mutex = event_counter_arc_mutex.lock().await;
+                            *event_counter_mutex += 1;
+                            // Responses
+                            // dbg!(event);
+                            const MAX_STRING_SIZE: usize = 100;
+
+                            let sliced_url: String = match event.response.url.chars().nth(MAX_STRING_SIZE){
+                                Some(_) => {
+                                    let mut inner_sliced_url: String = event.response.url[..MAX_STRING_SIZE-4].to_string();
+                                    inner_sliced_url.push_str(" ...");
+                                    inner_sliced_url
+                                },
+                                None => event.response.url.to_string()
+                            };
+
+
+
+                            println!("{event_counter_mutex:0000}: {sliced_url}");
+                        }
+                  },
                   event = request_paused.next() => {
                     if let Some(event) = event {
                         // Responses
@@ -82,7 +120,12 @@ async fn launch_inteceptor() -> Result<(), Box<dyn std::error::Error>> {
                       }
                   },
                   event = request_will_be_sent.next() => {
+
+
                       if let Some(event) = event {
+                        // let mut event_counter_mutex = event_counter_arc_mutex.lock().await;
+                        // *event_counter_mutex += 1;
+
                           let resolution = resolutions.entry(event.request_id.clone()).or_insert(InterceptResolution::new());
                           let action = if is_navigation(&event) {
                               InterceptAction::Abort
@@ -90,7 +133,9 @@ async fn launch_inteceptor() -> Result<(), Box<dyn std::error::Error>> {
                               InterceptAction::Forward
                           };
                           resolution.action = action;
-                          println!("sent: {resolution:?}");
+                        //   println!("sent: {resolution:?}");
+                        //   println!("{event_counter_mutex}: sent: {resolution:?}");
+
                           resolve(&intercept_page, &event.request_id, &mut resolutions).await;
                       }
                   },
