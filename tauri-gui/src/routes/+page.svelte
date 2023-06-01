@@ -1,6 +1,5 @@
 <script lang="ts">
-	import MainContent from '../layout/main_content/MainContent.svelte';
-	import BottomPanel from '../layout/bottom_panel/BottomPanel.svelte';
+	import MainContent from '$layout/main_content/MainContent.svelte';
 </script>
 
 <div class="flex flex-col h-screen">

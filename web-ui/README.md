@@ -1,38 +1,113 @@
-# create-svelte
+# myapp-v3-daisy: Svelte Kit + Tailwind CSS
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+## Sveltekit new project
 
-## Creating a project
+Follow tutorial: https://svelte.dev/docs#getting-started
 
-If you're seeing this, you've probably already done this step. Congrats!
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+```
+$ npm create svelte@latest myapp-v3-daisyui
 
-# create a new project in my-app
-npm create svelte@latest my-app
+
+create-svelte version 4.2.0
+
+┌  Welcome to SvelteKit!
+│
+◇  Which Svelte app template?
+│  Skeleton project
+│
+◇  Add type checking with TypeScript?
+│  Yes, using TypeScript syntax
+│
+◇  Select additional options (use arrow keys/space bar)
+│  Add ESLint for code linting, Add Prettier for code formatting
+│
+└  Your project is ready!
 ```
 
-## Developing
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+## Tailwind CSS setup
 
-```bash
-npm run dev
+### Setup
+Follow tutorial: https://tailwindcss.com/docs/guides/sveltekit
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+```
+$ npm install -D tailwindcss postcss autoprefixer
+
+$ npx tailwindcss init -p --ts 
+
 ```
 
-## Building
+### TailwindCSS Typography plugin
 
-To create a production version of your app:
-
-```bash
-npm run build
+#### Dependencies
+```
+$ npm i --save-dev @types/node
 ```
 
-You can preview the production build with `npm run preview`.
+#### Setup plugin
+Follow tutorial: https://tailwindcss.com/docs/typography-plugin#installation
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+```
+$ npm install -D @tailwindcss/typography
+```
+
+Then add the plugin to your `tailwind.config.js` file:
+
+```tailwind.config.js
+module.exports = {
+  theme: {
+    // ...
+  },
+  plugins: [
+    require('@tailwindcss/typography'),
+    // ...
+  ],
+}
+```
+
+
+## TailwindCSS + DaisyUI
+
+Follow tutorial: https://daisyui.com/docs/install/
+
+```
+$ npm i daisyui
+```
+Then add the plugin to your `tailwind.config.js` file:
+
+```tailwind.config.js
+module.exports = {
+  theme: {
+    // ...
+  },
+  plugins: [
+    require("daisyui"),
+    // ...
+  ],
+}
+
+```
+
+
+## Install Svelte  + adapter-static
+
+Follow tutorial: https://kit.svelte.dev/docs/single-page-apps
+
+Install with `npm i -D @sveltejs/adapter-static`, then add the adapter to your `svelte.config.js` with the following options:
+
+```svelte.config.js
+import adapter from '@sveltejs/adapter-static';
+
+...
+
+adapter: adapter({
+			// default options are shown
+			pages: 'build',
+			assets: 'build',
+			fallback: null
+		}),
+```
+
+
+
