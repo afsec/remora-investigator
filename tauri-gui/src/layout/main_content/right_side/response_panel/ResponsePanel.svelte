@@ -1,13 +1,14 @@
 <script lang="ts">
 	import Hdivider from '$lib/Hdivider.svelte';
+	import ResponseBodyPanel from './ResponseBodyPanel.svelte';
+	import ResponseHeaderPanel from './ResponseHeaderPanel.svelte';
+	import ResponseToolbar from './ResponseToolbar.svelte';
 </script>
 
-<div class="flex flex-col w-1/2 bg-base-300">
-	<div class="flex h-1/2 bg-base-300">
-		<p>Response Header Panel</p>
-	</div>
+<div class="flex flex-col w-1/2">
+	<ResponseToolbar />
 	<Hdivider />
-	<div class="flex h-1/2 bg-base-300">
-		<p>Response Body Panel</p>
-	</div>
+	<ResponseHeaderPanel />
+	<Hdivider />
+	<ResponseBodyPanel />
 </div>
