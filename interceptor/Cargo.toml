@@ -1,11 +1,13 @@
 [package]
 publish = false
-name = "web-debugger"
-version = "0.1.0"
+name = "remora-interceptor"
+version = "0.1.1"
 edition = "2021"
+rust-version = "1.70.0"
 
 
 [dependencies]
+
 anyhow = "1.0.71"
 base64 = "0.21.2"
 chromiumoxide = { git = "https://github.com/mattsse/chromiumoxide", branch = "main", default-features = false, features = [

@@ -1,16 +1,11 @@
 <script lang="ts">
-	import MainContent from '../layout/main_content/MainContent.svelte';
-	import BottomPanel from '../layout/bottom_panel/BottomPanel.svelte';
+	import MainContent from '$layout/main_content/MainContent.svelte';
+	import BottomPanel from '$layout/bottom_panel/BottomPanel.svelte';
+	import Hdivider from '$lib/Hdivider.svelte';
 </script>
 
 <div class="flex flex-col h-screen">
-	<!-- MAIN CONTENT - BEGIN -->
 	<MainContent />
-	<!-- MAIN CONTENT - END -->
-	<!-- DIVIDER BEGIN -->
-	<div class="flex h-1 bg-base-100" />
-	<!-- DIVIDER END -->
-	<!-- BOTTOM PANEL - BEGIN -->
+	<Hdivider />
 	<BottomPanel />
-	<!-- BOTTOM PANEL - END -->
 </div>

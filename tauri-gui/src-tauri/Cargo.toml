@@ -27,7 +27,7 @@ chromiumoxide = { git = "https://github.com/mattsse/chromiumoxide", branch = "ma
 futures = "0.3.28"
 tracing = "0.1.37"
 tracing-subscriber = { version = "0.3.17", features = ["env-filter"] }
-
+remora-interceptor = { path = "../../interceptor" }
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem and the built-in dev server is disabled.

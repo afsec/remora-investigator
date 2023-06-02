@@ -19,13 +19,19 @@ const TARGET: &str = "http://google.com/";
 
 pub struct Interceptor {
     state: Arc<Mutex<u64>>,
+    session_name: Option<String>,
 }
 
 impl Interceptor {
     pub fn new() -> Self {
         Self {
             state: Arc::new(Mutex::new(0)),
+            session_name: Default::default(),
         }
+    }
+    pub fn session_name(mut self, session_name: String) -> Self {
+        self.session_name = Some(session_name);
+        self
     }
     pub async fn launch(self) -> Result<(), Box<dyn std::error::Error>> {
         launch_inteceptor(self).await
@@ -262,3 +268,18 @@ async fn fullfill(page: &Page, request_id: &fetch::RequestId) {
         println!("Failed to fullfill request: {e}");
     }
 }
+
+// pub fn add(left: usize, right: usize) -> usize {
+//     left + right
+// }
+
+// #[cfg(test)]
+// mod tests {
+//     use super::*;
+
+//     #[test]
+//     fn it_works() {
+//         let result = add(2, 2);
+//         assert_eq!(result, 4);
+//     }
+// }

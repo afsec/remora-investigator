@@ -43,7 +43,8 @@
 				"rust-lang.rust-analyzer",
 				"serayuzgur.crates",
 				"tamasfe.even-better-toml",
-				"svelte.svelte-vscode"
+				"svelte.svelte-vscode",
+				"ms-vscode-remote.vscode-remote-extensionpack"
 			],
 			"settings": {
 				"editor.formatOnSave": true,
