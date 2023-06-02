@@ -18,6 +18,16 @@ serde_json = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 tauri = { version = "1.3.0", features = [] }
 tokio = { version = "1.28.2", features = ["full"] }
+anyhow = "1.0.71"
+base64 = "0.21.2"
+chromiumoxide = { git = "https://github.com/mattsse/chromiumoxide", branch = "main", default-features = false, features = [
+    "tokio",
+    "tokio-runtime",
+] }
+futures = "0.3.28"
+tracing = "0.1.37"
+tracing-subscriber = { version = "0.3.17", features = ["env-filter"] }
+
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem and the built-in dev server is disabled.
