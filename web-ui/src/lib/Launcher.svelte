@@ -10,8 +10,7 @@
 	}
 </script>
 
-<div class="space-y-2">
-	<input class="input" type="text" placeholder="SessionName" bind:value={sessionName} />
-	<button type="button" class="btn variant-filled" on:click={launch}>Launch browser</button>
-	<p>{outcomeMsg}</p>
+<div class="flex items-center space-y-2">
+	<button type="button" class="btn h-5 w-15 variant-filled" on:click={launch}>Launch</button>
 </div>
+<p>{outcomeMsg}</p>

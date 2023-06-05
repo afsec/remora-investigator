@@ -1,4 +1,6 @@
-<div class="flex h-8 p-2 items-center variant-filled-surface rounded-b-md justify-between">
+<div
+	class="flex h-8 p-2 items-center rounded-b-md justify-between bg-surface-100 dark:bg-surface-500"
+>
 	<div class="flex font-mono text-sm items-center">
 		<!-- request info -->
 		<div class="flex items-center">
