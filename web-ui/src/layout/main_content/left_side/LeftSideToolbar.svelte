@@ -4,7 +4,7 @@
 </script>
 
 <div
-	class="flex h-8 p-2 items-center bg-surface-100 dark:bg-surface-500 rounded-b-md justify-between"
+	class="flex h-8 p-2 items-center bg-surface-100 dark:bg-surface-500 rounded-md justify-between"
 >
 	<!-- button group -->
 	<div class="flex w-full items-center justify-between items-center gap-1">

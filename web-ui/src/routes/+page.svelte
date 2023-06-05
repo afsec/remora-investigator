@@ -4,8 +4,8 @@
 	import Hdivider from '$lib/Hdivider.svelte';
 </script>
 
-<div class="flex flex-col h-screen">
+<div class="flex flex-col h-screen p-2 gap-2">
 	<MainContent />
-	<Hdivider />
+	<!-- <Hdivider /> -->
 	<BottomPanel />
 </div>

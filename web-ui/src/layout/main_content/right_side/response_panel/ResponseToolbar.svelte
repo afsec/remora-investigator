@@ -1,5 +1,5 @@
 <div
-	class="flex h-8 p-2 items-center rounded-b-md justify-between bg-surface-100 dark:bg-surface-500"
+	class="flex h-8 p-2 items-center rounded-md justify-between bg-surface-100 dark:bg-surface-500"
 >
 	<div class="flex font-mono text-sm items-center">
 		<!-- request info -->
@@ -15,7 +15,7 @@
 		</div>
 	</div>
 	<!-- button group -->
-	<div class="flex items-center gap-1">
+	<div class="flex items-center gap-2">
 		<svg
 			fill="currentColor"
 			viewBox="0 0 24 24"

@@ -5,9 +5,9 @@
 	import NotesPanel from './NotesPanel.svelte';
 </script>
 
-<div class="flex flex-col w-52 bg-base-300">
+<div class="flex flex-col w-52 bg-base-300 gap-2">
 	<LeftSideToolbar />
 	<EventsPanel />
-	<Hdivider />
+	<!-- <Hdivider /> -->
 	<NotesPanel />
 </div>

@@ -5,10 +5,10 @@
 	import ResponseToolbar from './ResponseToolbar.svelte';
 </script>
 
-<div class="flex flex-col w-1/2">
+<div class="flex flex-col w-1/2 gap-2">
 	<ResponseToolbar />
-	<Hdivider />
+	<!-- <Hdivider /> -->
 	<ResponseHeaderPanel />
-	<Hdivider />
+	<!-- <Hdivider /> -->
 	<ResponseBodyPanel />
 </div>

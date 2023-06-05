@@ -4,8 +4,8 @@
 	import ResponsePanel from './response_panel/ResponsePanel.svelte';
 </script>
 
-<div class="flex grow">
+<div class="flex grow gap-2">
 	<RequestPanel />
-	<Vdivider />
+	<!-- <Vdivider /> -->
 	<ResponsePanel />
 </div>

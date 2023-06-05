@@ -4,8 +4,8 @@
 	import RightSide from './right_side/RightSide.svelte';
 </script>
 
-<div class="flex grow">
+<div class="flex grow gap-2">
 	<LeftSide />
-	<Vdivider />
+	<!-- <Vdivider /> -->
 	<RightSide />
 </div>
