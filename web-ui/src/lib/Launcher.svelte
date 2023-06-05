@@ -10,7 +10,9 @@
 	}
 </script>
 
-<div class="flex items-center space-y-2">
-	<button type="button" class="btn h-5 w-15 variant-filled" on:click={launch}>Launch</button>
+<div class="flex items-center">
+	<button type="button" class="btn btn-sm h-6 font-bold variant-filled" on:click={launch}
+		>Launch</button
+	>
 </div>
 <p>{outcomeMsg}</p>
