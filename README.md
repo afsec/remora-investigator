@@ -1,7 +1,7 @@
 # Remora Investigator (Linux/x86_64)
 
 
-Remora Investigator is a browser instrumentation tool to empowers users to conduct stealthy analysis of web applications, providing invaluable insights and bolstering cybersecurity efforts. By seamlessly integrating with a native browser, this tool empowers users to conduct stealthy analysis of web applications, providing invaluable insights and bolstering cybersecurity efforts.
+Remora Investigator is a browser instrumentation tool to empowers users to conduct stealthy analysis of web applications, providing invaluable insights and bolstering cybersecurity efforts. By seamlessly integrating with a native browser, this tool empowers users to conduct stealthy analysis of web applications, providing invaluable insights.
 
 You can take notes, do a full-text-search on the entire session, download artifacts, or simply registry the interactive activities between states of a Web Applications and its backend's traffic.
 
