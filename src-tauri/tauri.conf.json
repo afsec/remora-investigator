@@ -12,7 +12,15 @@
   },
   "tauri": {
     "allowlist": {
-      "all": false
+      "fs": {
+        "createDir": true,
+        "readFile": true,
+        "writeFile": true,
+        "exists": true,
+        "scope": [
+          "$APPDATA/remora_sessions/*"
+        ]
+      }
     },
     "bundle": {
       "active": true,

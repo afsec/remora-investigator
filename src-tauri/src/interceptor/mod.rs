@@ -17,20 +17,22 @@ use tokio::sync::Mutex;
 const CONTENT: &str = "<html><head><meta http-equiv=\"refresh\" content=\"0;URL='http://www.example.com/'\" /></head><body><h1>TEST</h1></body></html>";
 const TARGET: &str = "http://google.com/";
 
-pub struct Interceptor {
+pub struct RemoraInterceptor {
     state: Arc<Mutex<u64>>,
     session_name: Option<String>,
 }
 
-impl Interceptor {
+impl RemoraInterceptor {
     pub fn new() -> Self {
         Self {
             state: Arc::new(Mutex::new(0)),
             session_name: Default::default(),
         }
     }
-    pub fn session_name(mut self, session_name: String) -> Self {
-        self.session_name = Some(session_name);
+
+    pub fn session_name<T: AsRef<str>>(mut self, session_name: T) -> Self {
+        let name = session_name.as_ref();
+        self.session_name = Some(name.into());
         self
     }
     pub async fn launch(self) -> Result<(), Box<dyn std::error::Error>> {
@@ -38,7 +40,7 @@ impl Interceptor {
     }
 }
 
-async fn launch_inteceptor(ctx: Interceptor) -> Result<(), Box<dyn std::error::Error>> {
+async fn launch_inteceptor(ctx: RemoraInterceptor) -> Result<(), Box<dyn std::error::Error>> {
     tracing_subscriber::fmt::init();
 
     let (browser, mut handler) = Browser::launch(
