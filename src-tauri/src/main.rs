@@ -7,6 +7,7 @@ mod storage;
 
 use std::cell::RefCell;
 use std::path::PathBuf;
+use std::rc::Rc;
 use std::{
     collections::HashMap,
     sync::{
@@ -15,6 +16,10 @@ use std::{
     },
 };
 
+const MY_APP_DIR: &'static str = "/home/user/.local/share/com.github.afsec.remora";
+const MY_SESSION_FILES_DIR: &'static str = "/session_files/session_name.sqlite3";
+
+use anyhow::anyhow;
 use tauri::State;
 
 use crate::helpers::AppResult;
@@ -34,10 +39,41 @@ struct Connection(Mutex<Option<Client>>);
 async fn main() -> AppResult<()> {
     tauri::async_runtime::set(tokio::runtime::Handle::current());
 
-    // let app_data_path: RefCell<Option<PathBuf>> = RefCell::new(Default::default());
+    let app_data_path: Arc<Mutex<Option<PathBuf>>> = Arc::new(Mutex::new(Default::default()));
 
+    let arc_rw_data_path = app_data_path.clone();
     // let mut inner_app_data_path = app_data_path.clone();
-    let res = tauri::Builder::default()
+    let tauri = tauri::Builder::default().setup(move |app| {
+        // mutex_rw_data_path
+        //     .lock()
+        //     .map(|mut v| {
+        //         let maybe_data_path = app.path_resolver().app_data_dir();
+        //         dbg!(&maybe_data_path);
+        //         *v = maybe_data_path;
+        //     })
+        //     .unwrap();
+        // dbg!(&mutex_rw_data_path);
+        // drop(mutex_rw_data_path);
+        let app_data_dir = app.path_resolver().app_data_dir();
+        dbg!(&app_data_dir);
+
+        let mutex_guard_rw = arc_rw_data_path.lock();
+        match mutex_guard_rw {
+            Ok(mut mtx_guard) => *mtx_guard = app_data_dir,
+            Err(err) => {
+                dbg!(err);
+            }
+        };
+
+        Ok(())
+    });
+    std::thread::sleep(std::time::Duration::from_secs(2));
+    let mutex_ro_data_path = app_data_path.clone();
+    let maybe_data_path = mutex_ro_data_path.lock().map_err(|err| anyhow!("{err}"))?;
+
+    dbg!(&maybe_data_path);
+
+    let res = tauri
         .manage(Connection(Default::default()))
         .invoke_handler(tauri::generate_handler![
             launch_interceptor,
@@ -87,13 +123,6 @@ async fn launch_interceptor(session_name: String) -> String {
             .await
             .unwrap();
     });
-    // .setup(move |app| {
-    //     dbg!(&inner_app_data_path);
-    //     let inner = inner_app_data_path.get_mut();
-    //     *inner = app.path_resolver().app_data_dir();
-    //     dbg!(&inner);
-    //     Ok(())
-    //   });
 
     // dbg!(&app_data_path);
     let remora_storage = RemoraStorage::new().start_db("some_session.sqlite3").await;
