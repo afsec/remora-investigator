@@ -37,6 +37,11 @@ struct Connection(Mutex<Option<Client>>);
 
 #[tokio::main]
 async fn main() -> AppResult<()> {
+    // tauri::Builder::default()
+    //     .run(tauri::generate_context!())
+    //     .expect("error while running tauri application");
+
+    // Ok(())
     tauri::async_runtime::set(tokio::runtime::Handle::current());
 
     let app_data_path: Arc<Mutex<Option<PathBuf>>> = Arc::new(Mutex::new(Default::default()));
