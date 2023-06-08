@@ -1,6 +1,6 @@
 <script>
-	import MessageAltDetail from '$lib/icons/svg/boxicons/MessageDetail.svelte';
-	import InfoCircle from '$lib/icons/svg/boxicons/InfoCircle.svelte';
+	import MessageAltDetailIcon from '$lib/icons/svg/boxicons/MessageDetailIcon.svelte';
+	import InfoCircleIcon from '$lib/icons/svg/boxicons/InfoCircleIcon.svelte';
 </script>
 
 <div
@@ -21,7 +21,7 @@
 	</div>
 	<!-- button group -->
 	<div class="flex items-center gap-2">
-		<MessageAltDetail />
-		<InfoCircle />
+		<MessageAltDetailIcon />
+		<InfoCircleIcon />
 	</div>
 </div>
