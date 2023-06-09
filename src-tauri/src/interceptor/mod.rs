@@ -1,3 +1,6 @@
+use std::collections::HashMap;
+use std::sync::Arc;
+
 use base64::prelude::BASE64_STANDARD;
 use base64::Engine;
 use chromiumoxide::browser::{Browser, BrowserConfig};
@@ -7,26 +10,26 @@ use chromiumoxide::cdp::browser_protocol::fetch::{
 use chromiumoxide::cdp::browser_protocol::network::{
     self, ErrorReason, EventRequestWillBeSent, EventResponseReceived, ResourceType,
 };
-
 use chromiumoxide::Page;
 use futures::{select, StreamExt};
-use std::collections::HashMap;
-use std::sync::Arc;
+use sqlx::{Database, Pool};
 use tokio::sync::Mutex;
 
 const CONTENT: &str = "<html><head><meta http-equiv=\"refresh\" content=\"0;URL='http://www.example.com/'\" /></head><body><h1>TEST</h1></body></html>";
 const TARGET: &str = "http://google.com/";
 
-pub struct RemoraInterceptor {
+pub struct RemoraInterceptor<D: Database> {
     state: Arc<Mutex<u64>>,
     session_name: Option<String>,
+    db_connection: Option<Pool<D>>,
 }
 
-impl RemoraInterceptor {
+impl<D: Database> RemoraInterceptor<D> {
     pub fn new() -> Self {
         Self {
             state: Arc::new(Mutex::new(0)),
             session_name: Default::default(),
+            db_connection: Default::default(),
         }
     }
 
@@ -35,12 +38,19 @@ impl RemoraInterceptor {
         self.session_name = Some(name.into());
         self
     }
+    pub fn db_connection(mut self, db_conn: Pool<D>) -> Self {
+        // let name = session_name.as_ref();
+        self.db_connection = Some(db_conn);
+        self
+    }
     pub async fn launch(self) -> Result<(), Box<dyn std::error::Error>> {
         launch_inteceptor(self).await
     }
 }
 
-async fn launch_inteceptor(ctx: RemoraInterceptor) -> Result<(), Box<dyn std::error::Error>> {
+async fn launch_inteceptor<D: sqlx::Database>(
+    ctx: RemoraInterceptor<D>,
+) -> Result<(), Box<dyn std::error::Error>> {
     tracing_subscriber::fmt::init();
 
     let (browser, mut handler) = Browser::launch(
@@ -104,7 +114,7 @@ async fn launch_inteceptor(ctx: RemoraInterceptor) -> Result<(), Box<dyn std::er
                             };
 
 
-
+                            // TODO: Save event into database
                             println!("{event_counter_mutex:0000}: {sliced_url}");
                         }
                   },

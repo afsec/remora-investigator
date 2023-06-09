@@ -1,24 +1,39 @@
-use sqlx::{ConnectOptions, SqlitePool};
+use anyhow::anyhow;
+use sqlx::SqlitePool;
+
+use crate::SESSIONS_DIR;
 
 #[derive(Debug)]
 pub struct DbConnection(SqlitePool);
 impl DbConnection {
-    pub async fn start<T: AsRef<str>>(filename_path: T) -> anyhow::Result<Self> {
+    pub async fn start<T: AsRef<str>>(session_filename: T) -> anyhow::Result<Self> {
         use sqlx::sqlite::{SqliteConnectOptions, SqliteJournalMode, SqlitePoolOptions};
         use std::str::FromStr;
         use std::time::Duration;
 
-        let filename_path_str = filename_path.as_ref();
+        // TODO get path from static
+        let maybe_session_file_path = SESSIONS_DIR
+            .get()
+            .map(|pathbuf| {
+                let mut inner_pathbuf = pathbuf.clone();
+                inner_pathbuf.push(session_filename.as_ref());
+                inner_pathbuf.set_extension("sqlite3");
+                inner_pathbuf.to_str().map(|path_str| path_str.to_string())
+            })
+            .flatten();
+        // let filename_path_str = filename_path.as_ref();
+        // dbg!(&filename_path_str);
 
         let busy_timeout = Duration::from_secs(2);
 
-        let sqlite_path = if filename_path_str == ":memory:" {
-            format!("sqlite:{}", filename_path_str)
-        } else {
-            format!("sqlite://{}", filename_path_str)
+        let sqlite_path = match maybe_session_file_path {
+            Some(filename_path) => format!("sqlite://{}", filename_path),
+            None => return Err(anyhow!("Worng session_filename")),
         };
 
-        let mut connect_options = SqliteConnectOptions::from_str(sqlite_path.as_str())?
+        dbg!(&sqlite_path);
+
+        let connect_options = SqliteConnectOptions::from_str(sqlite_path.as_str())?
             .busy_timeout(busy_timeout)
             // Why we set to `Delete`: https://www.sqlite.org/pragma.html#pragma_journal_mode
             // > "The DELETE journaling mode is the normal behavior".
