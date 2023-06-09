@@ -1,9 +1,21 @@
-<!-- <div class="flex flex-col h-1/2 bg-base-300"> -->
-<div
-	class="flex flex-col h-1/2 items-center bg-surface-100 dark:bg-surface-500 rounded-md justify-between"
->
-	<div class="flex h-1/2 bg-base-300">
-		<p>Events</p>
+<script lang="ts">
+	let markdown = '';
+
+	function onTextareInputChange() {
+		// mdOutput = marked(userInput);
+	}
+</script>
+
+<div class="flex h-1/2 flex-col gap-2 rounded-md justify-between">
+	<div
+		class="flex h-8 p-2 items-center rounded-md justify-center bg-surface-100 dark:bg-surface-500"
+	>
+		<span class="font-bold">Events</span>
 	</div>
-	<div class="flex h-1/2 bg-base-300" />
+	<textarea
+		bind:value={markdown}
+		on:input={() => onTextareInputChange()}
+		class="flex h-full textarea textarea-bordered rounded-md resize-none"
+		placeholder="Type something"
+	/>
 </div>
