@@ -18,6 +18,7 @@ use std::{
 };
 
 use anyhow::anyhow;
+use sqlx::SqlitePool;
 use tauri::State;
 
 use crate::helpers::AppResult;
@@ -93,6 +94,57 @@ async fn main() -> AppResult<()> {
 
 #[tauri::command]
 async fn launch_interceptor(session_name: String) -> String {
+    use std::time::SystemTime;
+    let now = SystemTime::now()
+        .duration_since(SystemTime::UNIX_EPOCH)
+        .unwrap();
+    let session_name_str = match session_name.chars().nth(1) {
+        Some(_) => session_name,
+        None => "remora-session".to_string(),
+    };
+
+    let session_filename = format!("{session_name_str}-{}", now.as_secs());
+    // if let None = session_name.chars().nth(1) {
+    //     return format!(r#"{{ "success": false, "error": "sessionName has no character" }}"#);
+    // }
+
+    let outcome = format!("Session name: {}!", session_name_str);
+
+    if let Err(error) = check_session_dir() {
+        return format!(
+            r#"{{ "success": false, "error": "{}" }}"#,
+            error.to_string()
+        );
+    };
+    dbg!(&outcome);
+
+    let db_conn = match create_session_file(&session_filename).await {
+        Ok(conn) => conn,
+        Err(error) => {
+            return format!(
+                r#"{{ "success": false, "error": "{}" }}"#,
+                error.to_string()
+            );
+        }
+    };
+    tauri::async_runtime::spawn(async move {
+        RemoraInterceptor::new()
+            .session_name(session_name_str)
+            .db_connection(db_conn)
+            .launch()
+            .await
+            .unwrap();
+    });
+
+    format!(r#"{{ "success": true, "data": {outcome} }}"#)
+}
+
+async fn create_session_file<T: AsRef<str>>(session_filename: T) -> AppResult<SqlitePool> {
+    let remora_storage = RemoraStorage::new().start_db(session_filename).await;
+    remora_storage
+}
+
+fn check_session_dir() -> AppResult<()> {
     use std::ops::Not;
     let session_dir = SESSIONS_DIR
         .get()
@@ -106,29 +158,8 @@ async fn launch_interceptor(session_name: String) -> String {
         })
         .ok_or(anyhow!(
             "IMPOSSIBLE STATE: Session directory is not defined"
-        ));
-
-    if let Err(error) = session_dir {
-        return format!(
-            r#"{{ "success": false, "error": "{}" }}"#,
-            error.to_string()
-        );
-    };
-    // 1. Verificar se a pasta e existe
+        ))?;
 
     dbg!(&session_dir);
-
-    let output = format!("Session name: {}!", session_name);
-    tauri::async_runtime::spawn(async move {
-        RemoraInterceptor::new()
-            .session_name(session_name)
-            .launch()
-            .await
-            .unwrap();
-    });
-
-    // dbg!(&app_data_path);
-    // let remora_storage = RemoraStorage::new().start_db("some_session.sqlite3").await;
-
-    format!(r#"{{ "success": true }}"#)
+    Ok(())
 }
