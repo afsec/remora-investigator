@@ -18,7 +18,8 @@ use std::{
 };
 
 use anyhow::anyhow;
-use sqlx::SqlitePool;
+use sea_orm::DatabaseConnection;
+// use sqlx::SqlitePool;
 use tauri::State;
 
 use crate::helpers::AppResult;
@@ -98,6 +99,7 @@ async fn launch_interceptor(session_name: String) -> String {
     let now = SystemTime::now()
         .duration_since(SystemTime::UNIX_EPOCH)
         .unwrap();
+    dbg!(&session_name);
     let session_name_str = match session_name.chars().nth(1) {
         Some(_) => session_name,
         None => "remora-session".to_string(),
@@ -121,10 +123,12 @@ async fn launch_interceptor(session_name: String) -> String {
     let db_conn = match create_session_file(&session_filename).await {
         Ok(conn) => conn,
         Err(error) => {
-            return format!(
+            let error_json = format!(
                 r#"{{ "success": false, "error": "{}" }}"#,
                 error.to_string()
             );
+            dbg!(&error_json);
+            return error_json;
         }
     };
     tauri::async_runtime::spawn(async move {
@@ -139,7 +143,7 @@ async fn launch_interceptor(session_name: String) -> String {
     format!(r#"{{ "success": true, "data": {outcome} }}"#)
 }
 
-async fn create_session_file<T: AsRef<str>>(session_filename: T) -> AppResult<SqlitePool> {
+async fn create_session_file<T: AsRef<str>>(session_filename: T) -> AppResult<DatabaseConnection> {
     let remora_storage = RemoraStorage::new().start_db(session_filename).await;
     remora_storage
 }

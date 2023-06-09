@@ -12,19 +12,20 @@ use chromiumoxide::cdp::browser_protocol::network::{
 };
 use chromiumoxide::Page;
 use futures::{select, StreamExt};
-use sqlx::{Database, Pool};
+use sea_orm::DatabaseConnection;
+// use sqlx::{Database, Pool};
 use tokio::sync::Mutex;
 
 const CONTENT: &str = "<html><head><meta http-equiv=\"refresh\" content=\"0;URL='http://www.example.com/'\" /></head><body><h1>TEST</h1></body></html>";
 const TARGET: &str = "http://google.com/";
 
-pub struct RemoraInterceptor<D: Database> {
+pub struct RemoraInterceptor {
     state: Arc<Mutex<u64>>,
     session_name: Option<String>,
-    db_connection: Option<Pool<D>>,
+    db_connection: Option<DatabaseConnection>,
 }
 
-impl<D: Database> RemoraInterceptor<D> {
+impl RemoraInterceptor {
     pub fn new() -> Self {
         Self {
             state: Arc::new(Mutex::new(0)),
@@ -38,7 +39,7 @@ impl<D: Database> RemoraInterceptor<D> {
         self.session_name = Some(name.into());
         self
     }
-    pub fn db_connection(mut self, db_conn: Pool<D>) -> Self {
+    pub fn db_connection(mut self, db_conn: DatabaseConnection) -> Self {
         // let name = session_name.as_ref();
         self.db_connection = Some(db_conn);
         self
@@ -48,9 +49,7 @@ impl<D: Database> RemoraInterceptor<D> {
     }
 }
 
-async fn launch_inteceptor<D: sqlx::Database>(
-    ctx: RemoraInterceptor<D>,
-) -> Result<(), Box<dyn std::error::Error>> {
+async fn launch_inteceptor(ctx: RemoraInterceptor) -> Result<(), Box<dyn std::error::Error>> {
     tracing_subscriber::fmt::init();
 
     let (browser, mut handler) = Browser::launch(
