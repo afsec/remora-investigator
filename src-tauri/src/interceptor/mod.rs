@@ -13,7 +13,7 @@ use chromiumoxide::cdp::browser_protocol::network::{
 use chromiumoxide::Page;
 use futures::{select, StreamExt};
 use sea_orm::DatabaseConnection;
-// use sqlx::{Database, Pool};
+
 use tokio::sync::Mutex;
 
 const CONTENT: &str = "<html><head><meta http-equiv=\"refresh\" content=\"0;URL='http://www.example.com/'\" /></head><body><h1>TEST</h1></body></html>";
@@ -279,18 +279,3 @@ async fn fullfill(page: &Page, request_id: &fetch::RequestId) {
         println!("Failed to fullfill request: {e}");
     }
 }
-
-// pub fn add(left: usize, right: usize) -> usize {
-//     left + right
-// }
-
-// #[cfg(test)]
-// mod tests {
-//     use super::*;
-
-//     #[test]
-//     fn it_works() {
-//         let result = add(2, 2);
-//         assert_eq!(result, 4);
-//     }
-// }

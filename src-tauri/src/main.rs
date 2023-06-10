@@ -19,7 +19,6 @@ use std::{
 
 use anyhow::anyhow;
 use sea_orm::DatabaseConnection;
-// use sqlx::SqlitePool;
 use tauri::State;
 
 use crate::helpers::AppResult;
@@ -27,15 +26,6 @@ use crate::interceptor::RemoraInterceptor;
 use crate::storage::RemoraStorage;
 
 static SESSIONS_DIR: OnceLock<PathBuf> = OnceLock::new();
-
-// struct Client;
-
-// impl Client {
-//     fn send(&self) {}
-// }
-
-// #[derive(Default)]
-// struct Connection(Mutex<Option<Client>>);
 
 #[tokio::main]
 async fn main() -> AppResult<()> {
@@ -53,45 +43,12 @@ async fn main() -> AppResult<()> {
 
             Ok(())
         })
-        // .manage(Connection(Default::default()))
-        .invoke_handler(tauri::generate_handler![
-            launch_interceptor,
-            // connect,
-            // disconnect,
-            // connection_send
-        ])
+        .invoke_handler(tauri::generate_handler![launch_interceptor])
         .run(tauri::generate_context!());
 
     dbg!(&res);
     Ok(res?)
 }
-
-// #[tauri::command]
-// fn connect(connection: State<'_, Connection>) {
-//     *connection.0.lock().unwrap() = Some(Client {});
-// }
-
-// #[tauri::command]
-// fn disconnect(connection: State<'_, Connection>) {
-//     // drop the connection
-//     *connection.0.lock().unwrap() = None;
-// }
-
-// #[tauri::command]
-// fn connection_send(connection: State<'_, Connection>) {
-//     connection
-//         .0
-//         .lock()
-//         .unwrap()
-//         .as_ref()
-//         .expect("connection not initialize; use the `connect` command first")
-//         .send();
-// }
-
-// #[tauri::command]
-// async fn setup_interceptor session() -> String {
-//     "true".into()
-// }
 
 #[tauri::command]
 async fn launch_interceptor(session_name: String) -> String {
@@ -99,16 +56,14 @@ async fn launch_interceptor(session_name: String) -> String {
     let now = SystemTime::now()
         .duration_since(SystemTime::UNIX_EPOCH)
         .unwrap();
-    dbg!(&session_name);
-    let session_name_str = match session_name.chars().nth(1) {
-        Some(_) => session_name,
+    let session_name_from_ui = session_name;
+    dbg!(&session_name_from_ui);
+    let session_name_str = match session_name_from_ui.chars().nth(1) {
+        Some(_) => session_name_from_ui,
         None => "remora-session".to_string(),
     };
 
     let session_filename = format!("{session_name_str}-{}", now.as_secs());
-    // if let None = session_name.chars().nth(1) {
-    //     return format!(r#"{{ "success": false, "error": "sessionName has no character" }}"#);
-    // }
 
     let outcome = format!("Session name: {}!", session_name_str);
 

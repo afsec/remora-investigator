@@ -1,6 +1,6 @@
 use anyhow::anyhow;
 
-use sea_orm::{ConnectOptions, Database, DatabaseConnection};
+use sea_orm::{Database, DatabaseConnection};
 
 use crate::SESSIONS_DIR;
 
@@ -8,10 +8,6 @@ use crate::SESSIONS_DIR;
 pub struct DbConnection(DatabaseConnection);
 impl DbConnection {
     pub async fn start<T: AsRef<str>>(session_filename: T) -> anyhow::Result<Self> {
-        use sqlx::sqlite::{SqliteConnectOptions, SqliteJournalMode, SqlitePoolOptions};
-        use std::str::FromStr;
-        use std::time::Duration;
-
         // TODO get path from static
         let maybe_session_file_path = SESSIONS_DIR
             .get()
@@ -24,48 +20,14 @@ impl DbConnection {
             .flatten();
 
         let sqlite_path = match maybe_session_file_path {
-            Some(filename_path) => format!("sqlite://{}", filename_path),
+            Some(filename_path) => format!("sqlite://{}?mode=rwc", filename_path),
             None => return Err(anyhow!("Wrong session_filename")),
         };
 
         dbg!(&sqlite_path);
-        let connect_options = SqliteConnectOptions::from_str(sqlite_path.as_str())?
-            .busy_timeout(Duration::from_secs(2))
-            // Why we set to `Delete`: https://www.sqlite.org/pragma.html#pragma_journal_mode
-            // > "The DELETE journaling mode is the normal behavior".
-            .journal_mode(SqliteJournalMode::Delete)
-            .create_if_missing(true);
 
-        let db_conn_pool = match SqlitePoolOptions::new()
-            .max_connections(5)
-            .connect_with(connect_options.clone())
-            .await
-        {
-            Ok(pool) => pool,
-            Err(error) => {
-                // TODO
-                // panic!("Impossible state reached!")
-                dbg!(sqlite_path);
-                dbg!(connect_options);
-                panic!("{error}");
-            }
-        };
-        let mut opt = ConnectOptions::from(connect_options);
-        // let mut opt = ConnectOptions::new(sqlite_path);
-        opt.max_connections(5)
-            // .min_connections(2)
-            // .connect_timeout(Duration::from_secs(2))
-            // .acquire_timeout(Duration::from_secs(5))
-            // .idle_timeout(Duration::from_secs(8))
-            // .max_lifetime(Duration::from_secs(8))
-            .sqlx_logging(true)
-            // .sqlx_logging_level(log::LevelFilter::Info)
-            // .set_schema_search_path("my_schema".into()) 
-            ; // Setting default PostgreSQL schema
+        let db_connection: DatabaseConnection = Database::connect(sqlite_path).await?;
 
-        dbg!(&opt);
-        let db_connection = Database::connect(opt).await?;
-        
         dbg!(&db_connection);
 
         // * Bootstraping

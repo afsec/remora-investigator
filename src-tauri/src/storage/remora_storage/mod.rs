@@ -4,8 +4,6 @@ use sea_orm::DatabaseConnection;
 
 use self::connection::DbConnection;
 
-// use sqlx::SqlitePool;
-
 #[derive(Debug, Default)]
 pub struct RemoraStorage;
 
@@ -22,18 +20,3 @@ impl RemoraStorage {
         Ok(pool)
     }
 }
-
-// pub fn add(left: usize, right: usize) -> usize {
-//     left + right
-// }
-
-// #[cfg(test)]
-// mod tests {
-//     use super::*;
-
-//     #[test]
-//     fn it_works() {
-//         let result = add(2, 2);
-//         assert_eq!(result, 4);
-//     }
-// }
