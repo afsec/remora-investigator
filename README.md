@@ -1,11 +1,11 @@
-# Remora Investigator (Linux/x86_64)
+# Remora Investigator v0.1 (Linux/x86_64)
 
 
-Remora Investigator is a Firefox extension that helps you to stealthily investigate a web application. Could be used as a sidecar tool with an IAST (Interactive Application Security Testing). Powered by Rust and Elm-ui.
+Remora Investigator v0.1 was a Firefox extension that helps you to stealthily investigate a web application. Could be used as a sidecar tool with an IAST (Interactive Application Security Testing). Powered by Rust and Elm-ui.
 
 You can take notes, do a full-text-search on the entire session, download artifacts, or simply registry the interactive activities between states of a Web Applications and its backend's traffic.
 
-## Quoted in
+## v0.1 quoted in
 - **AppSecEzine #415 - jan/2022**: https://github.com/Simpsonpt/AppSecEzine/blob/master/Ezines/415%20-%20AppSec%20Ezine#L57-L58
 
 
