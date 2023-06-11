@@ -24,68 +24,69 @@ struct SessionInfo {
     name: String,
     path: String,
 }
+
 pub struct RemoraInterceptor {
-    state: Arc<Mutex<u64>>,
+    events_counter: Arc<Mutex<u64>>,
     session_name: String,
     storage: RemoraStorage,
 }
 
-pub struct RemoraInterceptorBuilderWithS {
-    state: Arc<Mutex<u64>>,
+pub struct RemoraInterceptorBuilderWithE {
+    events_counter: Arc<Mutex<u64>>,
 }
-impl RemoraInterceptorBuilderWithS {
-    pub fn session_name<T: AsRef<str>>(self, session_name: T) -> RemoraInterceptorBuilderWithSS {
-        let Self { state } = self;
-        RemoraInterceptorBuilderWithSS {
-            state,
+impl RemoraInterceptorBuilderWithE {
+    pub fn session_name<T: AsRef<str>>(self, session_name: T) -> RemoraInterceptorBuilderWithES {
+        let Self { events_counter } = self;
+        RemoraInterceptorBuilderWithES {
+            events_counter,
             session_name: session_name.as_ref().to_string(),
         }
     }
 }
-pub struct RemoraInterceptorBuilderWithSS {
-    state: Arc<Mutex<u64>>,
+pub struct RemoraInterceptorBuilderWithES {
+    events_counter: Arc<Mutex<u64>>,
     session_name: String,
 }
 
-impl RemoraInterceptorBuilderWithSS {
-    pub fn storage(self, storage: RemoraStorage) -> RemoraInterceptorBuilderWithSSD {
+impl RemoraInterceptorBuilderWithES {
+    pub fn storage(self, storage: RemoraStorage) -> RemoraInterceptorBuilderWithESD {
         let Self {
-            state,
+            events_counter,
             session_name,
         } = self;
 
-        RemoraInterceptorBuilderWithSSD {
-            state,
+        RemoraInterceptorBuilderWithESD {
+            events_counter,
             session_name,
             storage,
         }
     }
 }
 
-pub struct RemoraInterceptorBuilderWithSSD {
-    state: Arc<Mutex<u64>>,
+pub struct RemoraInterceptorBuilderWithESD {
+    events_counter: Arc<Mutex<u64>>,
     session_name: String,
     storage: RemoraStorage,
 }
 
-impl RemoraInterceptorBuilderWithSSD {
+impl RemoraInterceptorBuilderWithESD {
     pub fn build(self) -> RemoraInterceptor {
         let Self {
-            state,
+            events_counter,
             session_name,
             storage,
         } = self;
         RemoraInterceptor {
-            state,
+            events_counter,
             session_name,
             storage,
         }
     }
 }
 impl RemoraInterceptor {
-    pub fn new() -> RemoraInterceptorBuilderWithS {
-        RemoraInterceptorBuilderWithS {
-            state: Arc::new(Mutex::new(0)),
+    pub fn new() -> RemoraInterceptorBuilderWithE {
+        RemoraInterceptorBuilderWithE {
+            events_counter: Arc::new(Mutex::new(0)),
         }
     }
 
@@ -172,7 +173,7 @@ async fn launch_inteceptor(ctx: RemoraInterceptor) -> anyhow::Result<()> {
             .fuse();
 
         let intercept_page = page.clone();
-        let event_counter_arc_mutex: Arc<Mutex<u64>> = ctx.state.clone();
+        let event_counter_arc_mutex: Arc<Mutex<u64>> = ctx.events_counter.clone();
 
         let _ = tokio::task::spawn(async move {
             let mut resolutions: HashMap<network::RequestId, InterceptResolution> = HashMap::new();

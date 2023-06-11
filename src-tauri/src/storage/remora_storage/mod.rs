@@ -10,23 +10,21 @@ pub struct RemoraStorage {
     connection: DatabaseConnection,
 }
 
-pub struct RemoraStorageWithUrl {
+pub struct RemoraStorageBuilderWithU {
     uri: String,
 }
 
-impl RemoraStorageWithUrl {
+impl RemoraStorageBuilderWithU {
     pub async fn build(self) -> anyhow::Result<RemoraStorage> {
         let Self { uri } = self;
         let connection: DatabaseConnection = Database::connect(&uri).await?;
 
-        dbg!(&connection);
-        let storage = RemoraStorage { uri, connection };
-        Ok(storage)
+        Ok(RemoraStorage { uri, connection })
     }
 }
 
 impl RemoraStorage {
-    pub fn new<T: AsRef<str>>(session_filename: T) -> AppResult<RemoraStorageWithUrl> {
+    pub fn new<T: AsRef<str>>(session_filename: T) -> AppResult<RemoraStorageBuilderWithU> {
         let mut session_file_path = SESSIONS_DIR
             .get()
             .ok_or(anyhow!("sessions directory not defined"))?
@@ -46,7 +44,7 @@ impl RemoraStorage {
 
         dbg!(&database_uri);
 
-        Ok(RemoraStorageWithUrl { uri: database_uri })
+        Ok(RemoraStorageBuilderWithU { uri: database_uri })
     }
     pub async fn start_db(&self) -> anyhow::Result<()> {
         let _ = &self.db_bootstrap().await?;
