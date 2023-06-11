@@ -4,7 +4,7 @@
 mod entities;
 mod helpers;
 mod interceptor;
-
+mod model;
 mod storage;
 
 use std::path::PathBuf;
