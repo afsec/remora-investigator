@@ -1,6 +1,4 @@
-use std::collections::HashMap;
-use std::sync::Arc;
-
+use anyhow::anyhow;
 use base64::prelude::BASE64_STANDARD;
 use base64::Engine;
 use chromiumoxide::browser::{Browser, BrowserConfig};
@@ -12,51 +10,136 @@ use chromiumoxide::cdp::browser_protocol::network::{
 };
 use chromiumoxide::Page;
 use futures::{select, StreamExt};
-use sea_orm::DatabaseConnection;
+use std::collections::HashMap;
+use std::sync::Arc;
 
 use tokio::sync::Mutex;
+
+use crate::storage::RemoraStorage;
 
 const CONTENT: &str = "<html><head><meta http-equiv=\"refresh\" content=\"0;URL='http://www.example.com/'\" /></head><body><h1>TEST</h1></body></html>";
 const TARGET: &str = "http://google.com/";
 
+struct SessionInfo {
+    name: String,
+    path: String,
+}
 pub struct RemoraInterceptor {
     state: Arc<Mutex<u64>>,
-    session_name: Option<String>,
-    db_connection: Option<DatabaseConnection>,
+    session_name: String,
+    storage: RemoraStorage,
 }
 
+pub struct RemoraInterceptorBuilderWithS {
+    state: Arc<Mutex<u64>>,
+}
+impl RemoraInterceptorBuilderWithS {
+    pub fn session_name<T: AsRef<str>>(self, session_name: T) -> RemoraInterceptorBuilderWithSS {
+        let Self { state } = self;
+        RemoraInterceptorBuilderWithSS {
+            state,
+            session_name: session_name.as_ref().to_string(),
+        }
+    }
+}
+pub struct RemoraInterceptorBuilderWithSS {
+    state: Arc<Mutex<u64>>,
+    session_name: String,
+}
+
+impl RemoraInterceptorBuilderWithSS {
+    pub fn storage(self, storage: RemoraStorage) -> RemoraInterceptorBuilderWithSSD {
+        let Self {
+            state,
+            session_name,
+        } = self;
+
+        RemoraInterceptorBuilderWithSSD {
+            state,
+            session_name,
+            storage,
+        }
+    }
+}
+
+pub struct RemoraInterceptorBuilderWithSSD {
+    state: Arc<Mutex<u64>>,
+    session_name: String,
+    storage: RemoraStorage,
+}
+
+impl RemoraInterceptorBuilderWithSSD {
+    pub fn build(self) -> RemoraInterceptor {
+        let Self {
+            state,
+            session_name,
+            storage,
+        } = self;
+        RemoraInterceptor {
+            state,
+            session_name,
+            storage,
+        }
+    }
+}
 impl RemoraInterceptor {
-    pub fn new() -> Self {
-        Self {
+    pub fn new() -> RemoraInterceptorBuilderWithS {
+        RemoraInterceptorBuilderWithS {
             state: Arc::new(Mutex::new(0)),
-            session_name: Default::default(),
-            db_connection: Default::default(),
         }
     }
 
-    pub fn session_name<T: AsRef<str>>(mut self, session_name: T) -> Self {
-        let name = session_name.as_ref();
-        self.session_name = Some(name.into());
-        self
-    }
-    pub fn db_connection(mut self, db_conn: DatabaseConnection) -> Self {
-        // let name = session_name.as_ref();
-        self.db_connection = Some(db_conn);
-        self
-    }
-    pub async fn launch(self) -> Result<(), Box<dyn std::error::Error>> {
+    pub async fn launch(self) -> anyhow::Result<()> {
+        use url::Url;
+        let session_info = SessionInfo {
+            name: self.session_name().to_string(),
+            path: Url::parse(self.storage().uri())?.path().to_string(),
+        };
+
+        Self::save_session_info(self.storage(), session_info).await?;
+
         launch_inteceptor(self).await
+    }
+
+    async fn save_session_info(
+        remora_storage: &RemoraStorage,
+        session_info: SessionInfo,
+    ) -> anyhow::Result<()> {
+        use crate::entities::{prelude::*, *};
+        use sea_orm::*;
+        let SessionInfo { name, path } = session_info;
+        let session = session::ActiveModel {
+            name: ActiveValue::Set(name),
+            path: ActiveValue::Set(path),
+            ..Default::default()
+        };
+        let res = Session::insert(session)
+            .exec(remora_storage.connection())
+            .await?;
+
+        dbg!(&res);
+
+        Ok(())
+    }
+
+    pub fn session_name(&self) -> &str {
+        self.session_name.as_ref()
+    }
+
+    pub fn storage(&self) -> &RemoraStorage {
+        &self.storage
     }
 }
 
-async fn launch_inteceptor(ctx: RemoraInterceptor) -> Result<(), Box<dyn std::error::Error>> {
+async fn launch_inteceptor(ctx: RemoraInterceptor) -> anyhow::Result<()> {
     tracing_subscriber::fmt::init();
 
     let (browser, mut handler) = Browser::launch(
         BrowserConfig::builder()
             .with_head()
             .viewport(None)
-            .build()?,
+            .build()
+            .map_err(|err| anyhow!(err))?,
     )
     .await?;
 
@@ -91,7 +174,7 @@ async fn launch_inteceptor(ctx: RemoraInterceptor) -> Result<(), Box<dyn std::er
         let intercept_page = page.clone();
         let event_counter_arc_mutex: Arc<Mutex<u64>> = ctx.state.clone();
 
-        let intercept_handle = tokio::task::spawn(async move {
+        let _ = tokio::task::spawn(async move {
             let mut resolutions: HashMap<network::RequestId, InterceptResolution> = HashMap::new();
             loop {
                 select! {

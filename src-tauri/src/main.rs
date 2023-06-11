@@ -1,25 +1,16 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
+mod entities;
 mod helpers;
 mod interceptor;
+
 mod storage;
 
-use std::cell::RefCell;
 use std::path::PathBuf;
-use std::rc::Rc;
 use std::sync::OnceLock;
-use std::{
-    collections::HashMap,
-    sync::{
-        atomic::{AtomicUsize, Ordering},
-        Arc, Mutex,
-    },
-};
 
 use anyhow::anyhow;
-use sea_orm::DatabaseConnection;
-use tauri::State;
 
 use crate::helpers::AppResult;
 use crate::interceptor::RemoraInterceptor;
@@ -35,7 +26,7 @@ async fn main() -> AppResult<()> {
     tauri::async_runtime::set(tokio::runtime::Handle::current());
 
     let res = tauri::Builder::default()
-        .setup(move |app| {
+        .setup(|_| {
             desktop_dir().map(|mut pathbuf| {
                 pathbuf.push("remora_sessions/");
                 let _ = SESSIONS_DIR.set(pathbuf);
@@ -53,11 +44,15 @@ async fn main() -> AppResult<()> {
 #[tauri::command]
 async fn launch_interceptor(session_name: String) -> String {
     use std::time::SystemTime;
+    // TODO: Implement dispatcher
     let now = SystemTime::now()
         .duration_since(SystemTime::UNIX_EPOCH)
         .unwrap();
+
     let session_name_from_ui = session_name;
+
     dbg!(&session_name_from_ui);
+
     let session_name_str = match session_name_from_ui.chars().nth(1) {
         Some(_) => session_name_from_ui,
         None => "remora-session".to_string(),
@@ -73,10 +68,11 @@ async fn launch_interceptor(session_name: String) -> String {
             error.to_string()
         );
     };
+
     dbg!(&outcome);
 
-    let db_conn = match create_session_file(&session_filename).await {
-        Ok(conn) => conn,
+    let remora_storage = match start_storage(session_filename).await {
+        Ok(v) => v,
         Err(error) => {
             let error_json = format!(
                 r#"{{ "success": false, "error": "{}" }}"#,
@@ -86,10 +82,12 @@ async fn launch_interceptor(session_name: String) -> String {
             return error_json;
         }
     };
+
     tauri::async_runtime::spawn(async move {
         RemoraInterceptor::new()
             .session_name(session_name_str)
-            .db_connection(db_conn)
+            .storage(remora_storage)
+            .build()
             .launch()
             .await
             .unwrap();
@@ -98,9 +96,10 @@ async fn launch_interceptor(session_name: String) -> String {
     format!(r#"{{ "success": true, "data": {outcome} }}"#)
 }
 
-async fn create_session_file<T: AsRef<str>>(session_filename: T) -> AppResult<DatabaseConnection> {
-    let remora_storage = RemoraStorage::new().start_db(session_filename).await;
-    remora_storage
+async fn start_storage<T: AsRef<str>>(session_filename: T) -> anyhow::Result<RemoraStorage> {
+    let storage = RemoraStorage::new(&session_filename)?.build().await?;
+    let _ = storage.start_db().await?;
+    Ok(storage)
 }
 
 fn check_session_dir() -> AppResult<()> {
