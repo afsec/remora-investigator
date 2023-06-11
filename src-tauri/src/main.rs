@@ -11,6 +11,7 @@ use std::path::PathBuf;
 use std::sync::OnceLock;
 
 use anyhow::anyhow;
+use futures::TryFutureExt;
 
 use crate::helpers::AppResult;
 use crate::interceptor::RemoraInterceptor;
@@ -84,13 +85,15 @@ async fn launch_interceptor(session_name: String) -> String {
     };
 
     tauri::async_runtime::spawn(async move {
-        RemoraInterceptor::new()
+        if let Err(err) = RemoraInterceptor::new()
             .session_name(session_name_str)
             .storage(remora_storage)
             .build()
             .launch()
             .await
-            .unwrap();
+        {
+            dbg!(&err);
+        }
     });
 
     format!(r#"{{ "success": true, "data": {outcome} }}"#)
