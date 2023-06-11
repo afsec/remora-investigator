@@ -46,7 +46,7 @@
 	<!--* From PanelModel to View -->
 	{#if $panelModeStore === PanelMode.NO_NOTE}
 		<span
-			class="flex border-2 border-surface-500 dark:border-surface-500 rounded-md border-md h-full items-center justify-center font-bold"
+			class="flex border-[1px] border-surface-500 dark:border-surface-500 rounded-md border-md h-full items-center justify-center font-bold"
 		>
 			NO NOTE
 		</span>
@@ -57,7 +57,7 @@
 		/>
 	{:else if $panelModeStore === PanelMode.SAVED}
 		<textarea
-			class="flex h-full max-h-full overflow-auto textarea textarea-bordered rounded-md resize-none"
+			class="flex h-full max-h-full overflow-auto textarea textarea-bordered rounded-md resize-none disabled:!cursor-text"
 			bind:value={userTextInput}
 			disabled={true}
 		/>
