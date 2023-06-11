@@ -15,19 +15,15 @@ use std::sync::Arc;
 
 use tokio::sync::Mutex;
 
+use crate::model::session::{SessionInfo, SessionName};
 use crate::storage::RemoraStorage;
 
 const CONTENT: &str = "<html><head><meta http-equiv=\"refresh\" content=\"0;URL='http://www.example.com/'\" /></head><body><h1>TEST</h1></body></html>";
 const TARGET: &str = "http://google.com/";
 
-struct SessionInfo {
-    name: String,
-    path: String,
-}
-
 pub struct RemoraInterceptor {
     events_counter: Arc<Mutex<u64>>,
-    session_name: String,
+    session_name: SessionName,
     storage: RemoraStorage,
 }
 
@@ -39,13 +35,13 @@ impl RemoraInterceptorBuilderWithE {
         let Self { events_counter } = self;
         RemoraInterceptorBuilderWithES {
             events_counter,
-            session_name: session_name.as_ref().to_string(),
+            session_name: session_name.as_ref().to_string().into(),
         }
     }
 }
 pub struct RemoraInterceptorBuilderWithES {
     events_counter: Arc<Mutex<u64>>,
-    session_name: String,
+    session_name: SessionName,
 }
 
 impl RemoraInterceptorBuilderWithES {
@@ -65,7 +61,7 @@ impl RemoraInterceptorBuilderWithES {
 
 pub struct RemoraInterceptorBuilderWithESD {
     events_counter: Arc<Mutex<u64>>,
-    session_name: String,
+    session_name: SessionName,
     storage: RemoraStorage,
 }
 
@@ -90,11 +86,11 @@ impl RemoraInterceptor {
         }
     }
 
-    pub async fn launch(self) -> anyhow::Result<()> {
+    pub async fn launch<'a>(self) -> anyhow::Result<()> {
         use url::Url;
         let session_info = SessionInfo {
-            name: self.session_name().to_string(),
-            path: Url::parse(self.storage().uri())?.path().to_string(),
+            name: self.session_name(),
+            path: Url::parse(self.storage().uri())?.path().to_string().into(),
         };
 
         Self::save_session_info(self.storage(), session_info).await?;
@@ -102,16 +98,17 @@ impl RemoraInterceptor {
         launch_inteceptor(self).await
     }
 
-    async fn save_session_info(
+    async fn save_session_info<'session_name>(
         remora_storage: &RemoraStorage,
-        session_info: SessionInfo,
+        session_info: SessionInfo<'session_name>,
     ) -> anyhow::Result<()> {
         use crate::entities::{prelude::*, *};
         use sea_orm::*;
         let SessionInfo { name, path } = session_info;
+
         let session = session::ActiveModel {
-            name: ActiveValue::Set(name),
-            path: ActiveValue::Set(path),
+            name: ActiveValue::Set(name.as_ref().into()),
+            path: ActiveValue::Set(path.into()),
             ..Default::default()
         };
         let res = Session::insert(session)
@@ -123,8 +120,8 @@ impl RemoraInterceptor {
         Ok(())
     }
 
-    pub fn session_name(&self) -> &str {
-        self.session_name.as_ref()
+    pub fn session_name(&self) -> &SessionName {
+        &self.session_name
     }
 
     pub fn storage(&self) -> &RemoraStorage {
@@ -187,6 +184,12 @@ async fn launch_inteceptor(ctx: RemoraInterceptor) -> anyhow::Result<()> {
                             // dbg!(event);
                             const MAX_STRING_SIZE: usize = 100;
 
+                            {
+                                if *event_counter_mutex == 1 {
+                                    dbg!(&*event);
+                                }
+                            }
+
                             let sliced_url: String = match event.response.url.chars().nth(MAX_STRING_SIZE){
                                 Some(_) => {
                                     let mut inner_sliced_url: String = event.response.url[..MAX_STRING_SIZE-4].to_string();
@@ -221,9 +224,13 @@ async fn launch_inteceptor(ctx: RemoraInterceptor) -> anyhow::Result<()> {
                       }
                   },
                   event = request_will_be_sent.next() => {
-
-
                       if let Some(event) = event {
+                        {
+                            let event_counter_mutex = event_counter_arc_mutex.lock().await;
+                                if *event_counter_mutex == 0 {
+                                    dbg!(&*event);
+                                }
+                        }
                         // let mut event_counter_mutex = event_counter_arc_mutex.lock().await;
                         // *event_counter_mutex += 1;
 
