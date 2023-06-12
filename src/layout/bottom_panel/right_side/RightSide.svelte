@@ -23,7 +23,16 @@
 </script>
 
 <div
-	class="flex grow justify-center items-center h-full bg-base-300 border-[1px] border-surface-500 dark:border-surface-500 rounded-md"
+	class="flex grow h-full bg-base-300 border-[1px] border-surface-500 dark:border-surface-500 rounded-md gap-x-2"
 >
-	<h6 class="h6">{$tabIndexNumberToName}</h6>
+	<div
+		class="flex h-full justify-center items-center w-1/5 border-[1px] border-surface-500 dark:border-surface-500 rounded-md ml-2"
+	>
+		<h6 class="h6">{$tabIndexNumberToName}</h6>
+	</div>
+	<div
+		class="flex h-full grow justify-center items-center border-[1px] border-surface-500 dark:border-surface-500 rounded-md mr-2"
+	>
+		<h6 class="h6">{$tabIndexNumberToName}</h6>
+	</div>
 </div>
