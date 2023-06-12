@@ -4,7 +4,7 @@
 </script>
 
 <div
-	class="flex justify-center items-center h-full w-52 bg-base-300 border-[1px] border-surface-500 dark:border-surface-500 rounded-md"
+	class="flex justify-center items-center h-full w-52 bg-base-300 border-[1px] border-surface-500 dark:border-surface-500 rounded-md font-mono"
 >
 	<RadioGroup
 		rounded="rounded-md"
