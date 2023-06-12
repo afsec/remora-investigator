@@ -13,12 +13,7 @@
 		active="variant-filled font-bold"
 		hover="hover:variant-ghost"
 	>
-		<RadioItem
-			bind:group={$currentActiveTabLocalStorage}
-			name="bottom-panel-tab-item"
-			value={0}
-			title="BOZO"
-		>
+		<RadioItem bind:group={$currentActiveTabLocalStorage} name="bottom-panel-tab-item" value={0}>
 			<div class="flex flex-col justify-center items-center">
 				<span class="capitalize">History</span>
 				<span class="capitalize">(Browser)</span>
