@@ -46,7 +46,7 @@
 	<!--* From PanelModel to View -->
 	{#if $panelModeStore === PanelMode.NO_NOTE}
 		<span
-			class="flex border-[1px] border-surface-500 dark:border-surface-500 rounded-md border-md h-full items-center justify-center font-bold"
+			class="flex border-[1px] border-surface-500 dark:border-surface-500 rounded-md h-full items-center justify-center font-bold"
 		>
 			NO NOTE
 		</span>
