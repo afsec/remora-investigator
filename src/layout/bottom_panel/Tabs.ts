@@ -1,4 +1,3 @@
-import { localStorageStore } from '@skeletonlabs/skeleton';
-import type { Writable } from 'svelte/store';
+import { writable, type Writable } from "svelte/store";
 
-export const currentActiveTabLocalStorage: Writable<number> = localStorageStore('currentIndexActiveTab', 0);
+export const currentActiveTabLocalStorage: Writable<number> = writable(0);
