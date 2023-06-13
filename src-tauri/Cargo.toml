@@ -39,6 +39,7 @@ sea-orm = { version = "0.11.3", features = [
 sea-orm-migration = { version = "0.11.3", features = ["runtime-tokio-rustls"] }
 migration = { path = "./migration" }
 url = { version = "2.4.0", features = ["serde"] }
+chrono = { version = "0.4.26", features = ["serde"] }
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem and the built-in dev server is disabled.

@@ -9,6 +9,7 @@ pub struct Model {
     pub id: i32,
     pub request_id: String,
     pub method: String,
+    pub req_time: String,
     pub url: String,
 }
 

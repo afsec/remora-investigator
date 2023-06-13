@@ -25,6 +25,7 @@ impl MigrationTrait for Migration {
                             .not_null(),
                     )
                     .col(ColumnDef::new(Requests::Method).string().not_null())
+                    .col(ColumnDef::new(Requests::ReqTime).date_time().not_null())
                     .col(ColumnDef::new(Requests::Url).string().not_null())
                     .to_owned(),
             )
@@ -45,5 +46,6 @@ enum Requests {
     Id,
     RequestId,
     Method,
+    ReqTime,
     Url,
 }
