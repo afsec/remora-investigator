@@ -38,7 +38,8 @@ RUN curl --fail https://sh.rustup.rs -sSf \
     rustup target add x86_64-unknown-linux-musl && \
     rustup target add wasm32-unknown-unknown
 
-RUN cargo install -f wasm-bindgen-cli
+# RUN cargo install -f wasm-bindgen-cli
+RUN cargo install -f sea-orm-cli
 
 RUN rm -rf /opt/cargo/registry/
 

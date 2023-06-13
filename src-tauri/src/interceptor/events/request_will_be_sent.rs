@@ -72,6 +72,7 @@ impl<'a> From<RequestUrl<'a>> for String {
 impl RequestInfo<'_> {
     async fn save(self, remora_storage: &RemoraStorage) -> anyhow::Result<i32> {
         use crate::entities::{prelude::*, *};
+        use chrono::{offset::Local, DateTime, SecondsFormat};
         use sea_orm::*;
         let Self {
             request_id,
@@ -79,11 +80,15 @@ impl RequestInfo<'_> {
             url,
         } = self;
 
+        let date_time: DateTime<Local> = Local::now();
+
         let request = requests::ActiveModel {
             id: Default::default(),
             request_id: ActiveValue::Set(request_id.into()),
+
             method: ActiveValue::Set(method.into()),
             url: ActiveValue::Set(url.into()),
+            req_time: ActiveValue::Set(date_time.to_rfc3339_opts(SecondsFormat::Millis, true)),
         };
         let res = Requests::insert(request)
             .exec(remora_storage.connection())
