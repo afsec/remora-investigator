@@ -1,5 +1,6 @@
 use chromiumoxide::cdp::browser_protocol::network::EventRequestWillBeSent;
-use sea_orm::DatabaseConnection;
+use chrono::{DateTime, Local};
+
 use std::sync::Arc;
 
 use crate::{helpers::AppResult, interceptor::RemoraInterceptor, storage::RemoraStorage};
@@ -8,27 +9,19 @@ pub async fn handler(
     ctx: &RemoraInterceptor,
     event: Arc<EventRequestWillBeSent>,
 ) -> AppResult<i32> {
-    use std::time::SystemTime;
-
-    let db = ctx.storage().connection();
-
     let request_id = &event.request_id.inner();
 
     let method = &event.request.method;
 
     let url = &event.request.url;
 
-    let request_time = &event.wall_time.inner();
-
-    let now = SystemTime::now()
-        .duration_since(SystemTime::UNIX_EPOCH)
-        .unwrap()
-        .as_secs_f64();
+    let request_time: DateTime<Local> = Local::now();
 
     let request_info = RequestInfo {
         request_id: RequestId(*request_id),
         method: RequestMethod(method),
         url: RequestUrl(url),
+        request_time: RequestTime(request_time),
     };
     let last_inserted_id = request_info.save(ctx.storage()).await?;
 
@@ -37,6 +30,7 @@ pub async fn handler(
 
 struct RequestInfo<'a> {
     request_id: RequestId<'a>,
+    request_time: RequestTime,
     method: RequestMethod<'a>,
     url: RequestUrl<'a>,
 }
@@ -52,6 +46,17 @@ impl<'a> From<&'a String> for RequestId<'a> {
 impl<'a> From<RequestId<'a>> for String {
     fn from(value: RequestId<'a>) -> String {
         value.0.clone()
+    }
+}
+
+struct RequestTime(DateTime<Local>);
+impl TryFrom<RequestTime> for String {
+    type Error = anyhow::Error;
+
+    fn try_from(resquest_time: RequestTime) -> Result<Self, Self::Error> {
+        use chrono::SecondsFormat;
+        let timestamp_str = resquest_time.0.to_rfc3339_opts(SecondsFormat::Millis, true);
+        Ok(timestamp_str)
     }
 }
 
@@ -72,15 +77,13 @@ impl<'a> From<RequestUrl<'a>> for String {
 impl RequestInfo<'_> {
     async fn save(self, remora_storage: &RemoraStorage) -> anyhow::Result<i32> {
         use crate::entities::{prelude::*, *};
-        use chrono::{offset::Local, DateTime, SecondsFormat};
         use sea_orm::*;
         let Self {
             request_id,
             method,
             url,
+            request_time,
         } = self;
-
-        let date_time: DateTime<Local> = Local::now();
 
         let request = requests::ActiveModel {
             id: Default::default(),
@@ -88,7 +91,7 @@ impl RequestInfo<'_> {
 
             method: ActiveValue::Set(method.into()),
             url: ActiveValue::Set(url.into()),
-            req_time: ActiveValue::Set(date_time.to_rfc3339_opts(SecondsFormat::Millis, true)),
+            request_time: ActiveValue::Set(request_time.try_into()?),
         };
         let res = Requests::insert(request)
             .exec(remora_storage.connection())

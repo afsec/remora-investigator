@@ -61,6 +61,8 @@ impl RemoraStorage {
         let schema_manager = SchemaManager::new(&self.connection);
         Migrator::refresh(&self.connection).await?;
         assert!(schema_manager.has_table("session").await?);
+        assert!(schema_manager.has_table("requests").await?);
+        assert!(schema_manager.has_table("responses").await?);
         Ok(())
     }
 
