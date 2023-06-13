@@ -5,11 +5,11 @@
 
 <div class="flex justify-center items-center h-full w-52 font-mono">
 	<RadioGroup
-		rounded="rounded-md"
-		display="flex-col h-full w-full"
+		rounded="!border-2 !border-surface-500 !dark:border-surface-500 rounded-md"
+		display="flex-col h-full w-full !bg-transparent"
 		spacing="space-y-2"
 		active="variant-filled font-bold"
-		hover="hover:variant-ghost"
+		hover="hover:variant-soft-surface hover:font-bold"
 	>
 		<RadioItem bind:group={$currentActiveTabLocalStorage} name="bottom-panel-tab-item" value={0}>
 			<span class="capitalize text-sm">History (Browser)</span>
