@@ -36,7 +36,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tagName: remora-investigagor-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version
+          tagName: remora-investigator-v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version
           releaseName: 'v__VERSION__'
           releaseDraft: false
           prerelease: false
