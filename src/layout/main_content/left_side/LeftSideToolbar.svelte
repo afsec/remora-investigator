@@ -1,6 +1,8 @@
 <script lang="ts">
+	import Configurator from '$lib/Configurator.svelte';
 	import Launcher from '$lib/Launcher.svelte';
-	import CogIcon from '$lib/icons/svg/boxicons/CogIcon.svelte';
+	import Refresher from '$lib/Refresher.svelte';
+
 	import { LightSwitch } from '@skeletonlabs/skeleton';
 </script>
 
@@ -11,7 +13,8 @@
 	<div class="flex w-full items-center justify-between gap-1">
 		<div class="flex items-center gap-2">
 			<Launcher />
-			<CogIcon />
+			<Refresher />
+			<Configurator />
 		</div>
 		<LightSwitch />
 	</div>

@@ -27,6 +27,12 @@ impl MigrationTrait for Migration {
                     .col(ColumnDef::new(Requests::Method).string().not_null())
                     .col(ColumnDef::new(Requests::RequestTime).date_time().not_null())
                     .col(ColumnDef::new(Requests::Url).string().not_null())
+                    .index(
+                        Index::create()
+                            .unique()
+                            .name("request-id-idx")
+                            .col(Requests::RequestId),
+                    )
                     .to_owned(),
             )
             .await

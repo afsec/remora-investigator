@@ -13,8 +13,8 @@ use std::sync::OnceLock;
 
 use storage::RemoraStorage;
 
-use crate::endpoints::get_events::get_events;
 use crate::endpoints::launch_interceptor::launch_interceptor;
+use crate::endpoints::list_events::list_events;
 use crate::helpers::AppResult;
 
 static SESSIONS_DIR: OnceLock<PathBuf> = OnceLock::new();
@@ -36,7 +36,7 @@ async fn main() -> AppResult<()> {
 
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![launch_interceptor, get_events])
+        .invoke_handler(tauri::generate_handler![launch_interceptor, list_events])
         .run(tauri::generate_context!());
 
     dbg!(&res);
