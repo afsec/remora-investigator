@@ -6,9 +6,13 @@ use chrono::{DateTime, Local};
 
 use crate::interceptor::RemoraInterceptor;
 use crate::storage::RemoraStorage;
-use crate::AppResult;
+use crate::{AppResult, REMORA_STORAGE};
 
 pub async fn handler(ctx: &RemoraInterceptor, event: Arc<EventResponseReceived>) -> AppResult<i32> {
+    let storage = match REMORA_STORAGE.get() {
+        Some(stg) => stg,
+        None => return Err(anyhow!("REMORA_STORAGE not defined")),
+    };
     let request_id = *(&event.request_id.inner());
 
     let protocol = match &event.response.protocol {
@@ -33,7 +37,7 @@ pub async fn handler(ctx: &RemoraInterceptor, event: Arc<EventResponseReceived>)
         protocol: HttpProtocol(protocol),
     };
 
-    let last_inserted_id: i32 = response_info.save(ctx.storage()).await?;
+    let last_inserted_id: i32 = response_info.save(storage).await?;
 
     Ok(last_inserted_id)
 }
@@ -113,7 +117,7 @@ impl<'a> From<ResponseMimeType<'a>> for String {
     }
 }
 impl ResponseInfo<'_> {
-    async fn save(self, remora_storage: &RemoraStorage) -> anyhow::Result<i32> {
+    async fn save(self, remora_storage: &RemoraStorage) -> AppResult<i32> {
         use crate::entities::{prelude::*, *};
         use sea_orm::*;
         let Self {

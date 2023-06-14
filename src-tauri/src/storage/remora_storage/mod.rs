@@ -15,7 +15,7 @@ pub struct RemoraStorageBuilderWithU {
 }
 
 impl RemoraStorageBuilderWithU {
-    pub async fn build(self) -> anyhow::Result<RemoraStorage> {
+    pub async fn build(self) -> AppResult<RemoraStorage> {
         let Self { uri } = self;
         let connection: DatabaseConnection = Database::connect(&uri).await?;
 
@@ -46,16 +46,16 @@ impl RemoraStorage {
 
         Ok(RemoraStorageBuilderWithU { uri: database_uri })
     }
-    pub async fn start_db(&self) -> anyhow::Result<()> {
+    pub async fn start_db(&self) -> AppResult<()> {
         let _ = &self.db_bootstrap().await?;
         Ok(())
     }
 
-    async fn db_bootstrap(&self) -> anyhow::Result<()> {
+    async fn db_bootstrap(&self) -> AppResult<()> {
         let _ = &self.create_tables().await?;
         Ok(())
     }
-    async fn create_tables(&self) -> anyhow::Result<()> {
+    async fn create_tables(&self) -> AppResult<()> {
         use migration::Migrator;
         use sea_orm_migration::prelude::*;
         let schema_manager = SchemaManager::new(&self.connection);
