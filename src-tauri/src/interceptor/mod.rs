@@ -14,10 +14,10 @@ use tokio::sync::Mutex;
 use crate::helpers::AppResult;
 use crate::model::session::{SessionInfo, SessionName};
 use crate::storage::RemoraStorage;
+use crate::REMORA_STORAGE;
 
 pub struct RemoraInterceptor {
     session_name: SessionName,
-    storage: RemoraStorage,
 }
 
 pub struct RemoraInterceptorBuilder;
@@ -33,46 +33,30 @@ pub struct RemoraInterceptorBuilderWithS {
 }
 
 impl RemoraInterceptorBuilderWithS {
-    pub fn storage(self, storage: RemoraStorage) -> RemoraInterceptorBuilderWithSD {
-        let Self { session_name } = self;
-
-        RemoraInterceptorBuilderWithSD {
-            session_name,
-            storage,
-        }
-    }
-}
-
-pub struct RemoraInterceptorBuilderWithSD {
-    session_name: SessionName,
-    storage: RemoraStorage,
-}
-
-impl RemoraInterceptorBuilderWithSD {
     pub fn build(self) -> RemoraInterceptor {
-        let Self {
-            session_name,
-            storage,
-        } = self;
-        RemoraInterceptor {
-            session_name,
-            storage,
-        }
+        let Self { session_name } = self;
+        RemoraInterceptor { session_name }
     }
 }
+
 impl RemoraInterceptor {
     pub fn new() -> RemoraInterceptorBuilder {
         RemoraInterceptorBuilder
     }
 
-    pub async fn launch<'a>(self) -> anyhow::Result<()> {
+    pub async fn launch<'a>(self) -> AppResult<()> {
         use url::Url;
-        let session_info = SessionInfo {
-            name: self.session_name(),
-            path: Url::parse(self.storage().uri())?.path().to_string().into(),
+        let storage = match REMORA_STORAGE.get() {
+            Some(stg) => stg,
+            None => return Err(anyhow!("REMORA_STORAGE not defined")),
         };
 
-        Self::save_session_info(self.storage(), session_info).await?;
+        let session_info = SessionInfo {
+            name: self.session_name(),
+            path: Url::parse(storage.uri())?.path().to_string().into(),
+        };
+
+        Self::save_session_info(storage, session_info).await?;
 
         launch_inteceptor(self).await
     }
@@ -80,7 +64,7 @@ impl RemoraInterceptor {
     async fn save_session_info<'session_name>(
         remora_storage: &RemoraStorage,
         session_info: SessionInfo<'session_name>,
-    ) -> anyhow::Result<()> {
+    ) -> AppResult<()> {
         use crate::entities::{prelude::*, *};
         use sea_orm::*;
         let SessionInfo { name, path } = session_info;
@@ -90,11 +74,9 @@ impl RemoraInterceptor {
             path: ActiveValue::Set(path.into()),
             ..Default::default()
         };
-        let res = Session::insert(session)
+        let _ = Session::insert(session)
             .exec(remora_storage.connection())
             .await?;
-
-        dbg!(&res);
 
         Ok(())
     }
@@ -102,13 +84,9 @@ impl RemoraInterceptor {
     pub fn session_name(&self) -> &SessionName {
         &self.session_name
     }
-
-    pub fn storage(&self) -> &RemoraStorage {
-        &self.storage
-    }
 }
 
-async fn launch_inteceptor(ctx: RemoraInterceptor) -> anyhow::Result<()> {
+async fn launch_inteceptor(ctx: RemoraInterceptor) -> AppResult<()> {
     tracing_subscriber::fmt::init();
 
     let (browser, mut handler) = Browser::launch(

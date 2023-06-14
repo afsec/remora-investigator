@@ -1,14 +1,22 @@
+use anyhow::anyhow;
 use chromiumoxide::cdp::browser_protocol::network::EventRequestWillBeSent;
 use chrono::{DateTime, Local};
 
 use std::sync::Arc;
 
-use crate::{helpers::AppResult, interceptor::RemoraInterceptor, storage::RemoraStorage};
+use crate::{
+    helpers::AppResult, interceptor::RemoraInterceptor, storage::RemoraStorage, REMORA_STORAGE,
+};
 
 pub async fn handler(
     ctx: &RemoraInterceptor,
     event: Arc<EventRequestWillBeSent>,
 ) -> AppResult<i32> {
+    let storage = match REMORA_STORAGE.get() {
+        Some(stg) => stg,
+        None => return Err(anyhow!("REMORA_STORAGE not defined")),
+    };
+
     let request_id = &event.request_id.inner();
 
     let method = &event.request.method;
@@ -23,7 +31,7 @@ pub async fn handler(
         url: RequestUrl(url),
         request_time: RequestTime(request_time),
     };
-    let last_inserted_id = request_info.save(ctx.storage()).await?;
+    let last_inserted_id = request_info.save(storage).await?;
 
     Ok(last_inserted_id)
 }
@@ -75,7 +83,7 @@ impl<'a> From<RequestUrl<'a>> for String {
 }
 
 impl RequestInfo<'_> {
-    async fn save(self, remora_storage: &RemoraStorage) -> anyhow::Result<i32> {
+    async fn save(self, remora_storage: &RemoraStorage) -> AppResult<i32> {
         use crate::entities::{prelude::*, *};
         use sea_orm::*;
         let Self {
