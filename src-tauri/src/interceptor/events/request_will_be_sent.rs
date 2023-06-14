@@ -105,8 +105,6 @@ impl RequestInfo<'_> {
             .exec(remora_storage.connection())
             .await?;
 
-        dbg!(&res);
-
         Ok(res.last_insert_id)
     }
 }

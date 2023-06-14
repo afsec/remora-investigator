@@ -39,6 +39,6 @@ async fn main() -> AppResult<()> {
         .invoke_handler(tauri::generate_handler![launch_interceptor, list_events])
         .run(tauri::generate_context!());
 
-    dbg!(&res);
+
     Ok(res?)
 }
