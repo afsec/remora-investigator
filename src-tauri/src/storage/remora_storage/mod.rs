@@ -42,8 +42,6 @@ impl RemoraStorage {
             None => return Err(anyhow!("Wrong session_filename")),
         };
 
-        dbg!(&database_uri);
-
         Ok(RemoraStorageBuilderWithU { uri: database_uri })
     }
     pub async fn start_db(&self) -> AppResult<()> {

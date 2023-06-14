@@ -8,8 +8,8 @@ use crate::{
 #[tauri::command]
 pub async fn launch_interceptor(session_name: String) -> String {
     match handler(session_name).await {
-        Ok(data) => format!(r#"{{ "success": true, "data": "{data}" }}"#),
-        Err(error) => format!(r#"{{ "success": false, "error": "{error}" }}"#),
+        Ok(data) => format!(r#"{{ "success": true, "error": null, "data": "{data}" }}"#),
+        Err(error) => format!(r#"{{ "success": false, "error": "{error}", "data": null }}"#),
     }
 }
 
@@ -19,8 +19,6 @@ async fn handler(session_name: String) -> AppResult<String> {
     let now = SystemTime::now().duration_since(SystemTime::UNIX_EPOCH)?;
 
     let session_name_from_ui = session_name;
-
-    dbg!(&session_name_from_ui);
 
     let session_name_str = match session_name_from_ui.chars().nth(1) {
         Some(_) => session_name_from_ui,
@@ -33,21 +31,16 @@ async fn handler(session_name: String) -> AppResult<String> {
 
     check_session_dir()?;
 
-    dbg!(&outcome);
-
     let remora_storage = start_storage(session_filename).await?;
 
     let _ = REMORA_STORAGE.set(remora_storage);
 
     tauri::async_runtime::spawn(async move {
-        if let Err(err) = RemoraInterceptor::new()
+      RemoraInterceptor::new()
             .session_name(session_name_str)
             .build()
             .launch()
             .await
-        {
-            dbg!(&err);
-        }
     });
 
     Ok(outcome)
@@ -65,9 +58,7 @@ fn check_session_dir() -> AppResult<()> {
         .get()
         .map(|pathbuf| {
             if pathbuf.is_dir().not() {
-                if let Err(error) = std::fs::create_dir(pathbuf) {
-                    dbg!(error);
-                }
+                let _ = std::fs::create_dir(pathbuf);
             }
             pathbuf
         })

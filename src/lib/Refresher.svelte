@@ -1,14 +1,39 @@
 <script lang="ts">
 	import { invoke } from '@tauri-apps/api/tauri';
 	import RefreshIcon from '$lib/icons/svg/boxicons/RefreshIcon.svelte';
-	// const invoke = (str: string, obj: any): Promise<string> => Promise.resolve('Some text from outside');
+	import { get, writable, type Writable } from 'svelte/store';
+	import { Buffer } from 'buffer';
 
-	// let sessionName = '';
-	let outcomeMsg = '';
+	export const historyPanelContent: Writable<Event[]> = writable([]);
 
 	async function launch() {
-		outcomeMsg = await invoke('list_events', {});
-		alert(outcomeMsg);
+		const outcomeStr: string = await invoke('list_events', {});
+		let outcomeObj: Outcome = JSON.parse(outcomeStr);
+
+		if (outcomeObj.success && outcomeObj.data !== null) {
+			const decodedData: string = Buffer.from(outcomeObj.data, 'base64').toString('utf8');
+			const events: Event[] = JSON.parse(decodedData);
+			historyPanelContent.set(events);
+		} else {
+			alert(outcomeObj.error);
+		}
+		console.log(get(historyPanelContent));
+	}
+	interface Outcome {
+		success: boolean;
+		data: string | null;
+		error: string | null;
+	}
+	interface Event {
+		request_id: string;
+		request_time: string;
+		method: string;
+		url: string;
+		http_protocol: string;
+		response_time: string;
+		status_code: number;
+		response_url: string;
+		mime_type: string;
 	}
 </script>
 
