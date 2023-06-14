@@ -29,6 +29,12 @@ impl MigrationTrait for Migration {
                     .col(ColumnDef::new(Responses::StatusCode).integer().not_null())
                     .col(ColumnDef::new(Responses::ResponseUrl).string().not_null())
                     .col(ColumnDef::new(Responses::MimeType).string().not_null())
+                    .index(
+                        Index::create()
+                            .unique()
+                            .name("request-id-idx")
+                            .col(Responses::RequestId),
+                    )
                     .to_owned(),
             )
             .await
