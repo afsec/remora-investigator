@@ -1,3 +1,3 @@
 import { writable, type Writable } from "svelte/store";
 
-export const currentActiveTabLocalStorage: Writable<number> = writable(0);
+export const currentActiveTab: Writable<number> = writable(0);

@@ -1,29 +1,17 @@
 <script lang="ts">
-	import { derived } from 'svelte/store';
-	import { currentActiveTabLocalStorage } from '../Tabs';
+	import { derived, type Readable } from 'svelte/store';
+	import { currentActiveTab } from '../Tabs';
 	import ChevronRightIcon from '$lib/icons/svg/monoicons/ChevronRightIcon.svelte';
 	import ChevronLeftIcon from '$lib/icons/svg/monoicons/ChevronLeftIcon.svelte';
 	import ChevronDoubleLeftIcon from '$lib/icons/svg/monoicons/ChevronDoubleLeftIcon.svelte';
 	import ChevronDoubleRightIcon from '$lib/icons/svg/monoicons/ChevronDoubleRightIcon.svelte';
-
-	const tabIndexNumberToName = derived(currentActiveTabLocalStorage, ($currentTabIndex) => {
-		switch ($currentTabIndex) {
-			case 0:
-				return 'History';
-
-			case 1:
-				return 'Notes';
-
-			case 2:
-				return 'Alerts';
-
-			case 3:
-				return 'Logbook';
-
-			default:
-				return 'History';
-		}
-	});
+	import HistoryTabContent from '../HistoryTabContent.svelte';
+	import NotesTabContent from '../NotesTabContent.svelte';
+	import { historyPanelContent } from '$stores/historyPanelContentStore';
+	import NotesPanel from '$layout/main_content/left_side/NotesPanel/NotesPanel.svelte';
+	import AlertsTabContent from '../AlertsTabContent.svelte';
+	import LogBookTabContent from '../LogBookTabContent.svelte';
+	import ImpossibleStateTabContent from '../ImpossibleStateTabContent.svelte';
 
 	function gotoNextPage() {
 		console.log('gotoNextPage()');
@@ -75,6 +63,17 @@
 	<div
 		class="flex h-full grow justify-center items-center border-2 border-surface-500 dark:border-surface-500 rounded-md mr-2"
 	>
-		<h6 class="h6 font-mono">{$tabIndexNumberToName}</h6>
+		<!-- TODO: Try to use <svelte:component /> 	 -->
+		{#if $currentActiveTab === 0}
+			<HistoryTabContent />
+		{:else if $currentActiveTab === 1}
+			<NotesTabContent />
+		{:else if $currentActiveTab === 2}
+			<AlertsTabContent />
+		{:else if $currentActiveTab === 3}
+			<LogBookTabContent />
+		{:else}
+			<ImpossibleStateTabContent />
+		{/if}
 	</div>
 </div>
