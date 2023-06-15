@@ -10,7 +10,9 @@ const config = {
 	kit: {
 		adapter: adapter(),
 		alias: {
-			'$layout': 'src/layout'
+			'$layout': 'src/layout',
+			'$stores': 'src/stores',
+			'$entities': 'src/entities'
 		}
 	}
 };

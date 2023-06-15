@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { RadioGroup, RadioItem } from '@skeletonlabs/skeleton';
-	import { currentActiveTabLocalStorage } from '../Tabs';
+	import { currentActiveTab } from '../Tabs';
 </script>
 
 <div class="flex justify-center items-center h-full w-52 font-mono">
@@ -11,16 +11,16 @@
 		active="variant-filled font-bold"
 		hover="hover:variant-soft-surface hover:font-bold"
 	>
-		<RadioItem bind:group={$currentActiveTabLocalStorage} name="bottom-panel-tab-item" value={0}>
+		<RadioItem bind:group={$currentActiveTab} name="bottom-panel-tab-item" value={0}>
 			<span class="capitalize text-sm">History (Browser)</span>
 		</RadioItem>
-		<RadioItem bind:group={$currentActiveTabLocalStorage} name="bottom-panel-tab-item" value={1}>
+		<RadioItem bind:group={$currentActiveTab} name="bottom-panel-tab-item" value={1}>
 			<span class="capitalize text-sm">Notes (Events)</span>
 		</RadioItem>
-		<RadioItem bind:group={$currentActiveTabLocalStorage} name="bottom-panel-tab-item" value={2}>
+		<RadioItem bind:group={$currentActiveTab} name="bottom-panel-tab-item" value={2}>
 			<span class="capitalize text-sm">Alerts (Risks)</span>
 		</RadioItem>
-		<RadioItem bind:group={$currentActiveTabLocalStorage} name="bottom-panel-tab-item" value={3}>
+		<RadioItem bind:group={$currentActiveTab} name="bottom-panel-tab-item" value={3}>
 			<span class="capitalize text-sm">Logbook (Analysis)</span>
 		</RadioItem>
 	</RadioGroup>
