@@ -10,13 +10,7 @@
 
 	import { onMount } from 'svelte';
 
-	import {
-		setModeUserPrefers,
-		setModeCurrent,
-		Toast,
-		type ToastSettings,
-		toastStore
-	} from '@skeletonlabs/skeleton';
+	import { setModeUserPrefers, setModeCurrent, Toast, toastStore } from '@skeletonlabs/skeleton';
 	import { HistoryPanelStates, historyPanelContent } from '$stores/historyPanelContentStore';
 
 	onMount(() => {
