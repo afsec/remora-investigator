@@ -31,9 +31,7 @@
 </script>
 
 <div class="flex grow h-full gap-x-2">
-	<div
-		class="flex flex-col h-full gap-1 items-center w-40 border-2 border-surface-500 dark:border-surface-500 rounded-md"
-	>
+	<div class="flex flex-col h-full gap-1 items-center w-40">
 		<div class="flex flex-col items-center w-full">
 			<span class="mt-2 font-bold font-mono">Events</span>
 			<span class="font-mono">43</span>
@@ -60,9 +58,7 @@
 			</div>
 		</div>
 	</div>
-	<div
-		class="flex h-full grow justify-center items-center border-2 border-surface-500 dark:border-surface-500 rounded-md mr-2"
-	>
+	<div class="flex h-full grow justify-center items-center mr-2">
 		<!-- TODO: Try to use <svelte:component /> 	 -->
 		{#if $currentActiveTab === 0}
 			<HistoryTabContent />

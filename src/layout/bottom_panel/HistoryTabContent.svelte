@@ -26,19 +26,19 @@
 </script>
 
 <div class="table-container !h-full">
-	<table class="table table-hover">
+	<table class="table-compact table-hover">
 		<thead>
-			<tr>
-				<th class="text-sm">Id</th>
-				<th class="text-sm">Protocol</th>
-				<th class="text-sm">Req.timestamp</th>
-				<th class="text-sm">Method</th>
-				<th class="text-sm">URL</th>
-				<th class="text-sm">Status</th>
-				<th class="text-sm">Format</th>
-				<th class="text-sm">RTT</th>
-				<th class="text-sm">Resp. Body</th>
-				<th class="text-sm">Notes</th>
+			<tr class="font-mono text-xs">
+				<th>Id</th>
+				<th>Protocol</th>
+				<th>Req.timestamp</th>
+				<th>Method</th>
+				<th>URL</th>
+				<th>Status</th>
+				<th>Format</th>
+				<th>RTT</th>
+				<th>Resp. Body</th>
+				<th>Notes</th>
 			</tr>
 		</thead>
 		<tbody>
