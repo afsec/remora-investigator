@@ -32,7 +32,7 @@
 
 <div class="flex grow h-full gap-x-2">
 	<div
-		class="flex flex-col h-full gap-1 items-center w-1/5 border-2 border-surface-500 dark:border-surface-500 rounded-md"
+		class="flex flex-col h-full gap-1 items-center w-40 border-2 border-surface-500 dark:border-surface-500 rounded-md"
 	>
 		<div class="flex flex-col items-center w-full">
 			<span class="mt-2 font-bold font-mono">Events</span>
