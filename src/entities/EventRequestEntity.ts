@@ -8,4 +8,5 @@ export interface EventRequest {
     status_code: number;
     response_url: string;
     mime_type: string;
+    rtt?: string;
 }

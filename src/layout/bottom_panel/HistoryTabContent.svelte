@@ -1,8 +1,8 @@
 <script lang="ts">
 	import Loading from '$lib/Loading.svelte';
 	import { historyPanelContent, HistoryPanelStates } from '$stores/historyPanelContentStore';
-	import { Table, tableMapperValues, type TableSource } from '@skeletonlabs/skeleton';
-	import type { EventRequest } from '$entities/EventRequestEntity';
+	// import { Table, tableMapperValues, type TableSource } from '@skeletonlabs/skeleton';
+	// import type { EventRequest } from '$entities/EventRequestEntity';
 
 	// const sourceEvents: TableSource = {
 	// 	// A list of heading labels.
@@ -24,15 +24,6 @@
 	// 	foot: ['Total', '', '<code class="code">5</code>']
 	// };
 </script>
-
-<!-- export enum HistoryPanelStates {
-    INITIAL_STATE,
-    LOADING,
-    RECEIVED_SUCCESS,
-    RECEIVED_ERROR,
-} -->
-
-<!-- <Table source={sourceEvents} /> -->
 
 <div class="table-container !h-full">
 	<table class="table table-hover">
@@ -63,7 +54,7 @@
 							<td class="text-sm">{event.response_url.substring(0, 50)}</td>
 							<td class="text-sm">{event.status_code}</td>
 							<td class="text-sm">{event.mime_type}</td>
-							<td class="text-sm">{event.response_time}</td>
+							<td class="text-sm">{event.rtt}</td>
 							<td class="text-sm">?</td>
 							<td class="font-bold text-sm">X</td>
 						</tr>
