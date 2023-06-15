@@ -5,14 +5,21 @@
 	import { writable, type Writable } from 'svelte/store';
 	import PlayIcon from './icons/svg/boxicons/PlayIcon.svelte';
 	import PauseIcon from './icons/svg/boxicons/PauseIcon.svelte';
+	import { toastStore } from '@skeletonlabs/skeleton';
+	import type { OutcomeResponse } from '$entities/OutcomeResponseEntity';
 
 	let sessionName = '';
-	let outcomeMsg = '';
 
 	async function launch() {
 		currentLauncherState.set(1);
-		outcomeMsg = await invoke('launch_interceptor', { sessionName });
-		await message(outcomeMsg);
+
+		const outcomeStr: string = await invoke('launch_interceptor', { sessionName });
+
+		let outcomeObj: OutcomeResponse = JSON.parse(outcomeStr);
+
+		if (outcomeObj.success && outcomeObj.data !== null) {
+			toastStore.trigger({ message: `${outcomeObj.data}` });
+		}
 	}
 
 	export const currentLauncherState: Writable<number> = writable(0);
