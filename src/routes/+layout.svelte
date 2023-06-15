@@ -10,7 +10,8 @@
 
 	import { onMount } from 'svelte';
 
-	import { setModeUserPrefers, setModeCurrent } from '@skeletonlabs/skeleton';
+	import { setModeUserPrefers, setModeCurrent, Toast, toastStore } from '@skeletonlabs/skeleton';
+	import { HistoryPanelStates, historyPanelContent } from '$stores/historyPanelContentStore';
 
 	onMount(() => {
 		//* Skeleton docs: Light mode is represented by true, while dark mode is represented by false.
@@ -21,6 +22,18 @@
 		//* Set default theme mode of LightSwitch component to light
 		setModeUserPrefers(true);
 	});
+
+	$: {
+		if ($historyPanelContent.state === HistoryPanelStates.RECEIVED_SUCCESS) {
+			if ($historyPanelContent.data !== null && $historyPanelContent.data.length > 0) {
+				toastStore.trigger({
+					message: `Found <strong>${$historyPanelContent.data.length}</strong> events`
+				});
+			}
+		}
+	}
 </script>
+
+<Toast position="br" background="variant-filled" />
 
 <slot />
