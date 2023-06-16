@@ -7,34 +7,23 @@
 	let currentTile: number = 0;
 </script>
 
-<div class="flex flex-col h-full item-center justify-center">
-	<AppRail>
-		<AppRailTile bind:group={currentTile} name="tile-1" value={0} title="tile-1">
-			<svelte:fragment slot="lead">
+<div class="flex flex-col h-full items-center justify-center">
+	<div class="flex flex-coll items-center justify-center">
+		<AppRail>
+			<AppRailTile bind:group={currentTile} name="tile-1" value={0} title="tile-1">
 				<div class="flex flex-col items-center justify-center">
 					<MessageDetailIcon />
 					<span>History</span>
 				</div>
-			</svelte:fragment>
-			<!-- <span>History</span> -->
-			<!-- <div class="flex flex-col items-center justify-center">
-				<MessageDetailIcon />
-				<span>History</span>
-			</div> -->
-		</AppRailTile>
-		<AppRailTile bind:group={currentTile} name="tile-3" value={1} title="tile-3">
-			<svelte:fragment slot="lead">
+			</AppRailTile>
+			<AppRailTile bind:group={currentTile} name="tile-3" value={1} title="tile-3">
 				<div class="flex flex-col items-center justify-center">
 					<InfoCircleIcon />
 					<span>Alerts</span>
 				</div>
-			</svelte:fragment>
-			<!-- <div class="flex flex-col items-center justify-center">
-				<InfoCircleIcon />
-				<span>Alerts</span>
-			</div> -->
-		</AppRailTile>
-	</AppRail>
+			</AppRailTile>
+		</AppRail>
+	</div>
 </div>
 
 <!-- <div class="flex justify-center items-center h-full w-20 font-mono">

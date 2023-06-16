@@ -7,7 +7,11 @@
 	import ChevronDoubleRightIcon from '$lib/icons/svg/monoicons/ChevronDoubleRightIcon.svelte';
 	import HistoryTabContent from '../HistoryTabContent.svelte';
 	import NotesTabContent from '../NotesTabContent.svelte';
-	import { historyPanelContent } from '$stores/historyPanelContentStore';
+	import {
+		historyPanelContent,
+		HistoryPanelStates,
+		type HistoryPanelStore
+	} from '$stores/historyPanelContentStore';
 	import NotesPanel from '$layout/main_content/left_side/NotesPanel/NotesPanel.svelte';
 	import AlertsTabContent from '../AlertsTabContent.svelte';
 	import LogBookTabContent from '../LogBookTabContent.svelte';
@@ -28,13 +32,25 @@
 	function gotoLastPage() {
 		console.log('gotoLastPage()');
 	}
+
+	function getEventsLength(historyPanelStore: HistoryPanelStore): number {
+		if (historyPanelStore.state === HistoryPanelStates.RECEIVED_SUCCESS) {
+			if (historyPanelStore.data !== null && historyPanelStore.data.length > 0) {
+				return historyPanelStore.data.length;
+			} else {
+				return 0;
+			}
+		} else {
+			return 0;
+		}
+	}
 </script>
 
 <div class="flex grow h-full gap-x-2">
-	<div class="flex flex-col h-full gap-1 items-center w-40">
+	<div class="flex flex-col h-full gap-1 items-center w-32">
 		<div class="flex flex-col items-center w-full">
 			<span class="mt-2 font-bold font-mono">Events</span>
-			<span class="font-mono">43</span>
+			<span class="font-mono">{getEventsLength($historyPanelContent)}</span>
 			<hr class="w-full !border-t-2" />
 		</div>
 		<div>
@@ -42,9 +58,9 @@
 		</div>
 		<div class="flex flex-col items-center gap-2 h-full">
 			<div class="flex items-center justify-between w-full px-3 font-mono">
-				<span>2</span>
+				<span>1</span>
 				<span>of</span>
-				<span>3</span>
+				<span>?</span>
 			</div>
 			<div class="flex items-center justify-between w-full px-3">
 				<ChevronLeftIcon on:onClick={() => gotoPreviousPage()} />

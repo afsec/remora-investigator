@@ -7,6 +7,7 @@
 	import PauseIcon from './icons/svg/boxicons/PauseIcon.svelte';
 	import { toastStore } from '@skeletonlabs/skeleton';
 	import type { OutcomeResponse } from '$entities/OutcomeResponseEntity';
+	import { currentLauncherState } from '$stores/launcherStore';
 
 	let sessionName = '';
 
@@ -21,17 +22,23 @@
 			toastStore.trigger({ message: `${outcomeObj.data}` });
 		}
 	}
-
-	export const currentLauncherState: Writable<number> = writable(0);
 </script>
 
 <div>
 	<div class="flex items-center">
 		{#if $currentLauncherState == 0}
-			<PlayIcon on:onClick={launch} />
+			<button type="button" class="btn-icon btn-icon-sm" on:click={launch}>
+				<PlayIcon />
+			</button>
 		{/if}
 		{#if $currentLauncherState != 0}
-			<PauseIcon on:onClick={() => currentLauncherState.set(0)} />
+			<button
+				type="button"
+				class="btn-icon btn-icon-sm"
+				on:click={() => currentLauncherState.set(0)}
+			>
+				<PauseIcon />
+			</button>
 		{/if}
 	</div>
 </div>

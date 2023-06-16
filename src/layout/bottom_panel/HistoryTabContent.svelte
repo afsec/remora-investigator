@@ -1,62 +1,40 @@
 <script lang="ts">
 	import Loading from '$lib/Loading.svelte';
 	import { historyPanelContent, HistoryPanelStates } from '$stores/historyPanelContentStore';
-	// import { Table, tableMapperValues, type TableSource } from '@skeletonlabs/skeleton';
-	// import type { EventRequest } from '$entities/EventRequestEntity';
-
-	// const sourceEvents: TableSource = {
-	// 	// A list of heading labels.
-	// 	head: ['Id', 'Protocol'],
-	// 	// The data visibly shown in your table body UI.
-	// 	body: tableMapperValues($historyPanelContent ?? ([] as EventRequest[]), [
-	// 		'request_id',
-	// 		'http_protocol',
-	// 		'weight'
-	// 	]),
-	// 	// Optional: The data returned when interactive is enabled and a row is clicked.
-	// 	meta: tableMapperValues($historyPanelContent ?? ([] as EventRequest[]), [
-	// 		'request_id',
-	// 		'http_protocol',
-	// 		'symbol',
-	// 		'weight'
-	// 	]),
-	// 	// Optional: A list of footer labels.
-	// 	foot: ['Total', '', '<code class="code">5</code>']
-	// };
 </script>
 
 <div class="table-container !h-full">
 	<table class="table-compact table-hover">
 		<thead>
 			<tr class="font-mono text-xs">
-				<th>Id</th>
-				<th>Protocol</th>
-				<th>Req.timestamp</th>
-				<th>Method</th>
-				<th>URL</th>
-				<th>Status</th>
-				<th>Format</th>
-				<th>RTT</th>
-				<th>Resp. Body</th>
-				<th>Notes</th>
+				<th class="w-5">Id</th>
+				<th class="w-24">Protocol</th>
+				<th class="w-26">Req.timestamp</th>
+				<th class="w-32">Method</th>
+				<th class="w-64">URL</th>
+				<th class="w-10">Status</th>
+				<th class="w-32">Format</th>
+				<th class="w-12">RTT</th>
+				<th class="w-10">Body</th>
+				<th class="w-10">Notes</th>
 			</tr>
 		</thead>
-		<tbody>
+		<tbody class="font-mono">
 			{#if $historyPanelContent.state === HistoryPanelStates.RECEIVED_SUCCESS}
 				{#if $historyPanelContent.data !== null && $historyPanelContent.data.length > 0}
 					{#each $historyPanelContent.data as event, index}
-						<tr>
+						<tr class="h-2">
 							<!-- <td class="text-sm">{event.request_id}</td> -->
-							<td class="text-sm">{index + 1}</td>
-							<td class="text-sm">{event.http_protocol}</td>
-							<td class="text-sm">{event.request_time}</td>
-							<td class="text-sm">{event.method}</td>
-							<td class="text-sm">{event.response_url.substring(0, 50)}</td>
-							<td class="text-sm">{event.status_code}</td>
-							<td class="text-sm">{event.mime_type}</td>
-							<td class="text-sm">{event.rtt}</td>
-							<td class="text-sm">?</td>
-							<td class="font-bold text-sm">X</td>
+							<td class="text-center text-sm">{index + 1}</td>
+							<td class="text-center text-xs">{event.http_protocol}</td>
+							<td class="text-center text-[10px]">{event.request_time}</td>
+							<td class="text-center text-xs">{event.method}</td>
+							<td class="text-[10px]">{event.response_url.substring(0, 50)}</td>
+							<td class="text-center text-xs">{event.status_code}</td>
+							<td class="text-center text-[10px]">{event.mime_type}</td>
+							<td class="text-center text-[10px]">{event.rtt}</td>
+							<td class="text-center text-sm">?</td>
+							<td class="text-center font-bold text-sm">X</td>
 						</tr>
 					{/each}
 				{/if}
