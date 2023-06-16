@@ -16,7 +16,9 @@
 		<div class="flex items-center p-2 gap-2">
 			<p class="font-bold">id: 42</p>
 			<div>
-				<RequestIdIcon />
+				<button type="button" class="btn-icon btn-icon-sm">
+					<RequestIdIcon />
+				</button>
 			</div>
 			<p>| Headers: <span class="font-bold">14</span></p>
 			<p>| Body size: <span class="font-bold">1.17 KiB</span></p>
@@ -24,6 +26,8 @@
 	</div>
 	<!-- button group -->
 	<div>
-		<EditIcon />
+		<button type="button" class="btn-icon btn-icon-sm">
+			<EditIcon />
+		</button>
 	</div>
 </div>

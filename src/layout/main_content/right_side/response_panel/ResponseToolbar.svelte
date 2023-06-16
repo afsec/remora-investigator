@@ -21,7 +21,8 @@
 	</div>
 	<!-- button group -->
 	<div class="flex items-center gap-2">
-		<MessageAltDetailIcon />
-		<InfoCircleIcon />
+		<button type="button" class="btn-icon btn-icon-sm">
+			<InfoCircleIcon />
+		</button>
 	</div>
 </div>

@@ -5,6 +5,8 @@
 	import { Buffer } from 'buffer';
 	import { message } from '@tauri-apps/api/dialog';
 	import { historyPanelContent, HistoryPanelStates } from '$stores/historyPanelContentStore';
+	import { currentLauncherState } from '$stores/launcherStore';
+
 	import type { OutcomeResponse } from '$entities/OutcomeResponseEntity';
 	import type { EventRequest } from '$entities/EventRequestEntity';
 	import { differenceInMilliseconds } from 'date-fns';
@@ -109,14 +111,18 @@
 		} else {
 			await message(outcomeObj.error ?? 'UNKNOWN ERROR');
 		}
-		console.log(get(historyPanelContent));
+		// console.log(get(historyPanelContent));
 	}
 </script>
 
 <div>
 	<div class="flex items-center">
-		<button type="button" class="btn-icon btn-icon-sm" on:click={launch}>
-			<RefreshIcon />
-		</button>
+		{#if $currentLauncherState !== 0}
+			<button type="button" class="btn-icon btn-icon-sm" on:click={launch}>
+				<RefreshIcon />
+			</button>
+		{:else}
+			<button type="button" class="btn-icon btn-icon-sm" />
+		{/if}
 	</div>
 </div>
