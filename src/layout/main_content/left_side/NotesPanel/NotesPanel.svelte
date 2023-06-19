@@ -1,6 +1,7 @@
 <script lang="ts">
 	import SaveIcon from '$lib/icons/svg/boxicons/SaveIcon.svelte';
 	import AddIcon from '$lib/icons/svg/monoicons/AddIcon.svelte';
+	import BanIcon from '$lib/icons/svg/monoicons/BanIcon.svelte';
 	import EditIcon from '$lib/icons/svg/monoicons/EditIcon.svelte';
 	import { PanelMode, panelModeStore, togglePanelMode } from './panelTypes';
 
@@ -34,8 +35,8 @@
 			{#if $panelModeStore === PanelMode.NO_NOTE}
 				<AddIcon on:invoke={() => onClickedAddIcon()} />
 			{:else if $panelModeStore === PanelMode.EDIT}
-				<SaveIcon on:invoke={() => onClickSaveIcon()} />
-			{:else if $panelModeStore === PanelMode.SAVED}
+				<SaveIcon on:onClick={() => onClickSaveIcon()} />
+			{:else if $panelModeStore === PanelMode.SAVED || $panelModeStore === PanelMode.CANCELED}
 				<EditIcon on:invoke={() => onClickedEditIcon()} />
 			{:else}
 				<span class="h-6 w-6" />
@@ -55,7 +56,25 @@
 			class="flex h-full max-h-full overflow-auto textarea textarea-bordered rounded-md resize-none"
 			bind:value={userTextInput}
 		/>
-	{:else if $panelModeStore === PanelMode.SAVED}
+		<div class="relative">
+			<button
+				type="button"
+				class="z-10 absolute btn btn-icon btn-xs bottom-3 right-3 variant-filled"
+				on:click|preventDefault|stopPropagation={() => {
+					userTextInput = '';
+					panelModeStore.set(PanelMode.CANCELED);
+				}}
+			>
+				<BanIcon
+					size={20}
+					on:onClick={() => {
+						userTextInput = '';
+						panelModeStore.set(PanelMode.CANCELED);
+					}}
+				/>
+			</button>
+		</div>
+	{:else if $panelModeStore === PanelMode.SAVED || $panelModeStore === PanelMode.CANCELED}
 		<textarea
 			class="flex h-full max-h-full overflow-auto textarea textarea-bordered rounded-md resize-none disabled:!cursor-text"
 			bind:value={userTextInput}
