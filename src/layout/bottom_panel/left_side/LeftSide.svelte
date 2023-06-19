@@ -2,7 +2,7 @@
 	import { AppRail, AppRailTile } from '@skeletonlabs/skeleton';
 	import InfoCircleIcon from '$lib/icons/svg/boxicons/InfoCircleIcon.svelte';
 	import MessageDetailIcon from '$lib/icons/svg/boxicons/MessageDetailIcon.svelte';
-	import { currentActiveTab } from '../Tabs';
+	import { currentActiveTab } from '$stores/tabs';
 </script>
 
 <div class="flex flex-col h-full items-center justify-center">
