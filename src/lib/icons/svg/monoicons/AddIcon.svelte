@@ -6,8 +6,8 @@
 
 	const dispatch = createEventDispatcher();
 
-	function tauriInvoke() {
-		dispatch('invoke');
+	function onClick() {
+		dispatch('onClick');
 	}
 </script>
 
@@ -18,7 +18,7 @@
 	height={size}
 	width={size}
 	xmlns="http://www.w3.org/2000/svg"
-	on:click|preventDefault|stopPropagation={tauriInvoke}
+	on:click|preventDefault|stopPropagation={onClick}
 >
 	<path
 		xmlns="http://www.w3.org/2000/svg"

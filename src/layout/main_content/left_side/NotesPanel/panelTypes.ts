@@ -4,7 +4,6 @@ export enum PanelMode {
     NO_NOTE,
     EDIT,
     SAVED,
-    CANCELED,
     IMPOSSSIBLE_STATE
 }
 
@@ -19,8 +18,6 @@ export function togglePanelMode(): void {
         panelModeStore.set(PanelMode.SAVED)
     } else if (innerPanelModelStore === PanelMode.SAVED) {
         panelModeStore.set(PanelMode.EDIT)
-    } else if (innerPanelModelStore === PanelMode.CANCELED) {
-        panelModeStore.set(PanelMode.SAVED)
     } else {
         panelModeStore.set(PanelMode.IMPOSSSIBLE_STATE)
     }

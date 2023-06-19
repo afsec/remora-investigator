@@ -3,7 +3,6 @@
 
 	export let fill: string = 'currentColor';
 	export let size: number = 24;
-	export let withEventOnClick: boolean = false;
 
 	const dispatch = createEventDispatcher();
 
