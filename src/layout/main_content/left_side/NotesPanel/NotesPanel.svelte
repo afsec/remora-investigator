@@ -9,12 +9,16 @@
 
 	let userTextInput = '';
 
+	// Use this aux variable when User cancel the edit whe already has content.
+	let userOldTextInput = '';
+
 	function onClickedAddIcon(): void {
 		togglePanelMode();
 	}
 
 	function onClickedEditIcon(): void {
 		togglePanelMode();
+		userOldTextInput = userTextInput;
 	}
 
 	function onClickSaveIcon(): void {
@@ -68,8 +72,9 @@
 			>
 				<BanIcon
 					size={20}
-					on:click={() => {
+					on:onClick={() => {
 						panelModeStore.set(PanelMode.SAVED);
+						userTextInput = userOldTextInput;
 					}}
 				/>
 			</button>
@@ -88,7 +93,7 @@
 				class="z-10 absolute btn btn-sm bottom-4 right-3 variant-filled"
 				use:clipboard={{ input: 'noteContent' }}
 			>
-				<CopyIcon size={20} action={clipboard} />
+				<CopyIcon size={20} referenceClipboard="noteContent" />
 			</button>
 		</div>
 
