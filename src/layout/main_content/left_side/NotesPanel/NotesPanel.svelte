@@ -1,10 +1,16 @@
 <script lang="ts">
 	import SaveIcon from '$lib/icons/svg/boxicons/SaveIcon.svelte';
 	import AddIcon from '$lib/icons/svg/monoicons/AddIcon.svelte';
+	import BanIcon from '$lib/icons/svg/monoicons/BanIcon.svelte';
+	import CopyIcon from '$lib/icons/svg/monoicons/CopyIcon.svelte';
 	import EditIcon from '$lib/icons/svg/monoicons/EditIcon.svelte';
+	import { clipboard } from '@skeletonlabs/skeleton';
 	import { PanelMode, panelModeStore, togglePanelMode } from './panelTypes';
 
 	let userTextInput = '';
+
+	// Use this aux variable when User cancel the edit whe already has content.
+	let userOldTextInput = '';
 
 	function onClickedAddIcon(): void {
 		togglePanelMode();
@@ -12,6 +18,7 @@
 
 	function onClickedEditIcon(): void {
 		togglePanelMode();
+		userOldTextInput = userTextInput;
 	}
 
 	function onClickSaveIcon(): void {
@@ -32,11 +39,11 @@
 			<!-- TODO: If possible turn in switch expression -->
 			<!--* From PanelModel to Action -->
 			{#if $panelModeStore === PanelMode.NO_NOTE}
-				<AddIcon on:invoke={() => onClickedAddIcon()} />
+				<AddIcon on:onClick={() => onClickedAddIcon()} />
 			{:else if $panelModeStore === PanelMode.EDIT}
-				<SaveIcon on:invoke={() => onClickSaveIcon()} />
+				<SaveIcon on:onClick={() => onClickSaveIcon()} />
 			{:else if $panelModeStore === PanelMode.SAVED}
-				<EditIcon on:invoke={() => onClickedEditIcon()} />
+				<EditIcon on:onClick={() => onClickedEditIcon()} />
 			{:else}
 				<span class="h-6 w-6" />
 			{/if}
@@ -55,12 +62,41 @@
 			class="flex h-full max-h-full overflow-auto textarea textarea-bordered rounded-md resize-none"
 			bind:value={userTextInput}
 		/>
+		<div class="relative">
+			<button
+				type="button"
+				class="z-10 absolute btn btn-sm bottom-4 right-3 variant-filled"
+				on:click|preventDefault|stopPropagation={() => {
+					panelModeStore.set(PanelMode.SAVED);
+				}}
+			>
+				<BanIcon
+					size={20}
+					on:onClick={() => {
+						panelModeStore.set(PanelMode.SAVED);
+						userTextInput = userOldTextInput;
+					}}
+				/>
+			</button>
+		</div>
 	{:else if $panelModeStore === PanelMode.SAVED}
 		<textarea
 			class="flex h-full max-h-full overflow-auto textarea textarea-bordered rounded-md resize-none disabled:!cursor-text"
 			bind:value={userTextInput}
+			data-clipboard="noteContent"
 			disabled={true}
 		/>
+
+		<div class="relative">
+			<button
+				type="button"
+				class="z-10 absolute btn btn-sm bottom-4 right-3 variant-filled"
+				use:clipboard={{ input: 'noteContent' }}
+			>
+				<CopyIcon size={20} referenceClipboard="noteContent" />
+			</button>
+		</div>
+
 		<!--! IMPOSSIBLE STATE -->
 	{:else}
 		<span
