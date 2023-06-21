@@ -36,7 +36,7 @@
           unzip zstd iproute2 jq
           clang llvm lldb glibc pkg-config
           rustup musl
-          cargo-sort cargo-audit cargo-deny cargo-vet
+          cargo-sort cargo-audit cargo-deny cargo-vet cargo-generate
           wasm-pack wabt binaryen wasm-bindgen-cli trunk
           helix cocogitto difftastic watchexec
           sea-orm-cli cargo-tauri
