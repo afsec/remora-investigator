@@ -111,7 +111,6 @@
 		} else {
 			await message(outcomeObj.error ?? 'UNKNOWN ERROR');
 		}
-		// console.log(get(historyPanelContent));
 	}
 </script>
 

@@ -10,8 +10,8 @@
 		<Loading />
 	</div>
 {:else}
-		<table class="table-hover h-full">
-			<TableHead />
-			<TableBody />
-		</table>
+	<table class="table-wrapper-events table-hover">
+		<TableHead />
+		<TableBody />
+	</table>
 {/if}
