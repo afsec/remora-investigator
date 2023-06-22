@@ -34,7 +34,7 @@
 	}
 </script>
 
-<div class="flex flex-col h-full gap-1 items-center w-32">
+<div class="flex flex-col h-full gap-1 items-center w-32 min-w-32">
 	<div class="flex flex-col items-center w-full">
 		<span class="mt-2 font-bold font-mono">Events</span>
 		<span class="font-mono">{getEventsLength($historyPanelContent)}</span>
