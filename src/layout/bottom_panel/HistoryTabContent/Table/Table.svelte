@@ -7,7 +7,7 @@
 </script>
 
 {#if $historyPanelContent.state === HistoryPanelStates.LOADING}
-	<div class="flex items-center justify-center">
+	<div class="flex w-full items-center justify-center">
 		<Loading />
 	</div>
 {:else}
