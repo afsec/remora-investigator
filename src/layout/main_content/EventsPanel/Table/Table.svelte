@@ -10,10 +10,8 @@
 		<Loading />
 	</div>
 {:else}
-	<!-- <div class="hideScrollbar"> -->
 		<table class="table-hover h-full">
 			<TableHead />
 			<TableBody />
 		</table>
-	<!-- </div> -->
 {/if}

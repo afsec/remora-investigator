@@ -63,21 +63,14 @@
 			bind:value={userTextInput}
 		/>
 		<div class="relative">
-			<button
-				type="button"
+			<BanIcon
 				class="z-10 absolute btn btn-sm bottom-4 right-3 variant-filled"
-				on:click|preventDefault|stopPropagation={() => {
+				size={20}
+				on:onClick={() => {
 					panelModeStore.set(PanelMode.SAVED);
+					userTextInput = userOldTextInput;
 				}}
-			>
-				<BanIcon
-					size={20}
-					on:onClick={() => {
-						panelModeStore.set(PanelMode.SAVED);
-						userTextInput = userOldTextInput;
-					}}
-				/>
-			</button>
+			/>
 		</div>
 	{:else if $panelModeStore === PanelMode.SAVED}
 		<textarea
