@@ -1,4 +1,4 @@
-<thead>
+<thead class="bg-surface-300 dark:bg-surface-500 rounded-lg">
 	<tr class="font-mono text-xs">
 		<th class="w-[5%] text-center">Id</th>
 		<th class="w-[5%] text-center">Protocol</th>
