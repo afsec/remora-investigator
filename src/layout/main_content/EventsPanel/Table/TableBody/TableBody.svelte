@@ -2,7 +2,7 @@
 	import { historyPanelContent, HistoryPanelStates } from '$stores/historyPanelContentStore';
 </script>
 
-<tbody class="font-mono h-48">
+<tbody class="font-mono h-full w-full">
 	{#if $historyPanelContent.state === HistoryPanelStates.RECEIVED_SUCCESS && $historyPanelContent.data !== null && $historyPanelContent.data.length > 0}
 		{#each $historyPanelContent.data as event, index}
 			<tr>

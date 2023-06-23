@@ -42,8 +42,6 @@
 			<span class="ml-1 text-xs font-bold">Size: 23 B</span>
 		</div>
 		<div class="flex items-center">
-			<!-- TODO: If possible turn in switch expression -->
-			<!--* From PanelModel to Action -->
 			{#if $panelModeStore === PanelMode.NO_NOTE}
 				<AddIcon on:onClick={() => onClickedAddIcon()} />
 			{:else if $panelModeStore === PanelMode.EDIT}

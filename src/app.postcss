@@ -20,6 +20,7 @@ body {
 table { 
     @apply !table-fixed !overflow-hidden;
     height: 100%;
+  
 } 
 
 .table-wrapper {
@@ -28,6 +29,11 @@ table {
 
 .table-wrapper-events {
 	@apply overflow-hidden 
+}
+
+::-webkit-scrollbar {
+    width: 0;
+    height: 0;
 }
 
 table tbody td {
@@ -39,7 +45,7 @@ tr th {
 }
 
 table thead {
-    @apply  !align-middle 
+    @apply !align-middle 
 }
 
 table td {

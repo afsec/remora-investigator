@@ -3,11 +3,11 @@
 	import Table from './Table/Table.svelte';
 
 	function refreshEvents(): void {
-		console.log('[PAGINATOR]: refreshEvents()');
+		console.log('[EVENTS PANEL]: refreshEvents()');
 	}
 </script>
 
-<div class="flex h-1/2 flex-col gap-2 rounded-md justify-between">
+<div class="flex h-1/2 flex-col gap-2 rounded-md justify-between overflow-hidden">
 	<div
 		class="flex h-8 p-2 items-center rounded-md justify-between bg-surface-100 dark:bg-surface-500"
 	>
@@ -16,9 +16,7 @@
 			<span class="font-bold">28</span>)</span
 		>
 
-		<button on:click|preventDefault|stopPropagation={() => refreshEvents()}>
-			<RefreshIcon />
-		</button>
+		<RefreshIcon on:onClick={() => refreshEvents()} />
 	</div>
-		<Table />
+	<Table />
 </div>
