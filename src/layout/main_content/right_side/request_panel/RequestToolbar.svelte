@@ -1,5 +1,5 @@
 <script>
-	import RequestIdIcon from '$lib/icons/svg/RequestIdIcon.svelte';
+	import RequestIdIcon from '$lib/icons/svg/monoicons/RequestIdIcon.svelte';
 	import EditIcon from '$lib/icons/svg/monoicons/EditIcon.svelte';
 </script>
 
@@ -16,9 +16,7 @@
 		<div class="flex items-center p-2 gap-2">
 			<p class="font-bold">id: 42</p>
 			<div>
-				<button type="button" class="btn-icon btn-icon-sm">
-					<RequestIdIcon />
-				</button>
+				<RequestIdIcon class="btn-icon btn-icon-sm" />
 			</div>
 			<p>| Headers: <span class="font-bold">14</span></p>
 			<p>| Body size: <span class="font-bold">1.17 KiB</span></p>

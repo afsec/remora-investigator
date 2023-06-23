@@ -27,18 +27,10 @@
 <div>
 	<div class="flex items-center">
 		{#if $currentLauncherState == 0}
-			<button type="button" class="btn-icon btn-icon-sm" on:click={launch}>
-				<PlayIcon />
-			</button>
+			<PlayIcon on:onClick={launch} class="btn-icon btn-icon-sm" />
 		{/if}
 		{#if $currentLauncherState != 0}
-			<button
-				type="button"
-				class="btn-icon btn-icon-sm"
-				on:click={() => currentLauncherState.set(0)}
-			>
-				<PauseIcon />
-			</button>
+			<PauseIcon class="btn-icon btn-icon-sm" on:onClick={() => currentLauncherState.set(0)} />
 		{/if}
 	</div>
 </div>

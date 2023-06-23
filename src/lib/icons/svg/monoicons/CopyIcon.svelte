@@ -1,19 +1,12 @@
 <script lang="ts">
 	import { clipboard } from '@skeletonlabs/skeleton';
-	import { createEventDispatcher } from 'svelte';
 
 	export let fill: string = 'currentColor';
 	export let size: number = 24;
 	export let referenceClipboard: string;
-	const dispatch = createEventDispatcher();
-
-	function onClick() {
-		dispatch('onClick');
-	}
 </script>
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<div use:clipboard={{ input: referenceClipboard }}>
+<button type="button" class={$$props.class} use:clipboard={{ input: referenceClipboard }}>
 	<svg
 		fill="none"
 		viewBox="0 0 24 24"
@@ -27,4 +20,4 @@
 			{fill}
 		/>
 	</svg>
-</div>
+</button>

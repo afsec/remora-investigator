@@ -6,14 +6,12 @@
 </script>
 
 {#if $historyPanelContent.state === HistoryPanelStates.LOADING}
-	<div class="flex items-center justify-center">
+	<div class="flex h-full w-full items-center justify-center">
 		<Loading />
 	</div>
 {:else}
-	<div class="table-container !h-full pt-3">
-		<table class="table-compact table-hover">
-			<TableHead />
-			<TableBody />
-		</table>
-	</div>
+	<table class="table-wrapper-events table-hover pb-2">
+		<TableHead />
+		<TableBody />
+	</table>
 {/if}

@@ -4,8 +4,14 @@
 	import BanIcon from '$lib/icons/svg/monoicons/BanIcon.svelte';
 	import CopyIcon from '$lib/icons/svg/monoicons/CopyIcon.svelte';
 	import EditIcon from '$lib/icons/svg/monoicons/EditIcon.svelte';
-	import { clipboard } from '@skeletonlabs/skeleton';
+	import { clipboard, popup, type PopupSettings } from '@skeletonlabs/skeleton';
 	import { PanelMode, panelModeStore, togglePanelMode } from './panelTypes';
+
+	const cancelPopupHover: PopupSettings = {
+		event: 'hover',
+		target: 'cancelPopupHover',
+		placement: 'top'
+	};
 
 	let userTextInput = '';
 
@@ -36,8 +42,6 @@
 			<span class="ml-1 text-xs font-bold">Size: 23 B</span>
 		</div>
 		<div class="flex items-center">
-			<!-- TODO: If possible turn in switch expression -->
-			<!--* From PanelModel to Action -->
 			{#if $panelModeStore === PanelMode.NO_NOTE}
 				<AddIcon on:onClick={() => onClickedAddIcon()} />
 			{:else if $panelModeStore === PanelMode.EDIT}
@@ -62,15 +66,11 @@
 			class="flex h-full max-h-full overflow-auto textarea textarea-bordered rounded-md resize-none"
 			bind:value={userTextInput}
 		/>
-		<div class="relative">
-			<button
-				type="button"
-				class="z-10 absolute btn btn-sm bottom-4 right-3 variant-filled"
-				on:click|preventDefault|stopPropagation={() => {
-					panelModeStore.set(PanelMode.SAVED);
-				}}
-			>
+
+		<div class="relative" use:popup={cancelPopupHover}>
+			<button class="z-10 absolute bottom-4 right-3" use:popup={cancelPopupHover}>
 				<BanIcon
+					class=" btn btn-sm bottom-4 right-3 variant-filled [&>*]:pointer-events-none"
 					size={20}
 					on:onClick={() => {
 						panelModeStore.set(PanelMode.SAVED);
@@ -78,6 +78,11 @@
 					}}
 				/>
 			</button>
+
+			<div class="z-10 card p-1 variant-filled" data-popup="cancelPopupHover">
+				<span class="text-xs font-bold">Cancel</span>
+				<div class="arrow variant-filled" />
+			</div>
 		</div>
 	{:else if $panelModeStore === PanelMode.SAVED}
 		<textarea

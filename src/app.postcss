@@ -1,7 +1,7 @@
 /*place global styles here */
 html,
 body {
-	@apply h-full;
+	@apply h-full overflow-hidden;
 }
 
 .textarea {
@@ -11,3 +11,53 @@ body {
 .table-compact tbody td {
 	@apply !pt-0 !pb-0 
 }
+
+.table-events-height {
+    height: 100%;
+    overflow: hidden;
+}
+
+table { 
+    @apply !table-fixed !overflow-hidden;
+    height: 100%;
+  
+} 
+
+.table-wrapper {
+	@apply overflow-y-hidden
+}
+
+.table-wrapper-events {
+	@apply overflow-hidden 
+}
+
+::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
+table tbody td {
+	@apply !pt-0 !pb-0 
+}
+
+tr th {
+   @apply !overflow-hidden  !whitespace-nowrap text-ellipsis
+}
+
+table thead {
+    @apply !align-middle 
+}
+
+table td {
+	@apply !pt-0 !pb-0 !overflow-hidden !whitespace-nowrap !overflow-ellipsis text-sm text-center
+}
+
+tbody {
+    @apply block overflow-y-scroll
+}
+
+thead, tbody tr {
+    @apply w-full table-fixed;
+    display:table;
+}
+

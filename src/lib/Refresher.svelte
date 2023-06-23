@@ -111,16 +111,13 @@
 		} else {
 			await message(outcomeObj.error ?? 'UNKNOWN ERROR');
 		}
-		// console.log(get(historyPanelContent));
 	}
 </script>
 
 <div>
 	<div class="flex items-center">
 		{#if $currentLauncherState !== 0}
-			<button type="button" class="btn-icon btn-icon-sm" on:click={launch}>
-				<RefreshIcon />
-			</button>
+			<RefreshIcon class="btn-icon btn-icon-sm" on:onClick={launch} />
 		{:else}
 			<button type="button" class="btn-icon btn-icon-sm" />
 		{/if}

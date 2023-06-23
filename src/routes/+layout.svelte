@@ -10,10 +10,19 @@
 
 	import { onMount } from 'svelte';
 
-	import { setModeUserPrefers, setModeCurrent, Toast, toastStore } from '@skeletonlabs/skeleton';
+	import { computePosition, autoUpdate, offset, shift, flip, arrow } from '@floating-ui/dom';
+	import {
+		setModeUserPrefers,
+		setModeCurrent,
+		Toast,
+		toastStore,
+		storePopup
+	} from '@skeletonlabs/skeleton';
 	import { HistoryPanelStates, historyPanelContent } from '$stores/historyPanelContentStore';
 
 	onMount(() => {
+		storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
+
 		//* Skeleton docs: Light mode is represented by true, while dark mode is represented by false.
 
 		//* Set default theme mode to light
