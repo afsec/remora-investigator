@@ -42,6 +42,7 @@
           sea-orm-cli cargo-tauri
           hexyl
           nodejs_20
+          vscodium
           nixd
         ];
       in
