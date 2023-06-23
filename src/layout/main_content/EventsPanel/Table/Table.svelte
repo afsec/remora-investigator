@@ -10,7 +10,7 @@
 		<Loading />
 	</div>
 {:else}
-	<table class="table-wrapper-events table-hover">
+	<table class="table-wrapper-events table-hover pb-2">
 		<TableHead />
 		<TableBody />
 	</table>
