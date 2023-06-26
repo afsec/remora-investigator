@@ -13,6 +13,12 @@
 		placement: 'top'
 	};
 
+	const copyPopupHover: PopupSettings = {
+		event: 'hover',
+		target: 'copyPopupHover',
+		placement: 'top'
+	};
+
 	let userTextInput = '';
 
 	// Use this aux variable when User cancel the edit whe already has content.
@@ -92,14 +98,19 @@
 			disabled={true}
 		/>
 
-		<div class="relative">
+		<div class="relative" use:popup={copyPopupHover}>
 			<button
-				type="button"
-				class="z-10 absolute btn btn-sm bottom-4 right-3 variant-filled"
+				class="z-10 absolute bottom-4 right-3 btn btn-sm variant-filled"
+				use:popup={copyPopupHover}
 				use:clipboard={{ input: 'noteContent' }}
 			>
 				<CopyIcon size={20} referenceClipboard="noteContent" />
 			</button>
+
+			<div class="z-10 card p-1 variant-filled" data-popup="copyPopupHover">
+				<span class="text-xs font-bold">Copy</span>
+				<div class="arrow variant-filled" />
+			</div>
 		</div>
 
 		<!--! IMPOSSIBLE STATE -->
