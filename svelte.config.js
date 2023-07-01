@@ -8,7 +8,8 @@ const config = {
 		alias: {
 			'$layout': 'src/layout',
 			'$stores': 'src/stores',
-			'$entities': 'src/entities'
+			'$entities': 'src/entities',
+			'$modals': 'src/modals'
 		}
 	}
 };
