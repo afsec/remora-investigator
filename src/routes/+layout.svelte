@@ -16,13 +16,28 @@
 		setModeCurrent,
 		Toast,
 		toastStore,
-		storePopup
+		storePopup,
+		Modal,
+		type ModalComponent
 	} from '@skeletonlabs/skeleton';
 	import { HistoryPanelStates, historyPanelContent } from '$stores/historyPanelContentStore';
+	import SettingsAppMdal from '$modals/SettingsAppMdal.svelte';
+
+	const modalComponentRegistry: Record<string, ModalComponent> = {
+		// Custom Modal 1
+		settingsAppMdal: {
+			// Pass a reference to your custom component
+			ref: SettingsAppMdal,
+			// Add the component properties as key/value pairs
+			props: {},
+			// Provide a template literal for the default component slot
+			slot: '<p>Remora Investiator</p>'
+		}
+	};
+
+	storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
 
 	onMount(() => {
-		storePopup.set({ computePosition, autoUpdate, offset, shift, flip, arrow });
-
 		//* Skeleton docs: Light mode is represented by true, while dark mode is represented by false.
 
 		//* Set default theme mode to light
@@ -43,6 +58,7 @@
 	}
 </script>
 
+<Modal components={modalComponentRegistry} />
 <Toast position="br" background="variant-filled" />
 
 <slot />
