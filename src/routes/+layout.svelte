@@ -24,13 +24,8 @@
 	import SettingsAppMdal from '$modals/SettingsAppMdal.svelte';
 
 	const modalComponentRegistry: Record<string, ModalComponent> = {
-		// Custom Modal 1
 		settingsAppMdal: {
-			// Pass a reference to your custom component
 			ref: SettingsAppMdal,
-			// Add the component properties as key/value pairs
-			props: {},
-			// Provide a template literal for the default component slot
 			slot: '<p>Remora Investiator</p>'
 		}
 	};

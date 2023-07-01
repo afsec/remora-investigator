@@ -2,7 +2,7 @@
 	import { modalStore } from '@skeletonlabs/skeleton';
 	import { VERSION } from '@sveltejs/kit';
 
-	// Exposes parent props to this component.
+	// Props of appSettingsModalSettings.
 	export let parent: any;
 
 	function onClickEventSaveAppSettings(): void {
