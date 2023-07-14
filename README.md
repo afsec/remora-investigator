@@ -5,6 +5,10 @@ Remora Investigator is a browser instrumentation tool to empowers users to condu
 
 You can take notes, do a full-text-search on the entire session, download artifacts, or simply registry the interactive activities between states of a Web Applications and its backend's traffic.
 
+## Screenshots
+
+![Alt text](./imgs/remora-investigator.png)
+
 ## v0.1 quoted in
 - **AppSecEzine #415 - jan/2022**: https://github.com/Simpsonpt/AppSecEzine/blob/master/Ezines/415%20-%20AppSec%20Ezine#L57-L58
 
