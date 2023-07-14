@@ -7,7 +7,7 @@
 		{#each $historyPanelContent.data as event, index}
 			<tr>
 				<td class="w-[20%] text-center text-xs">{index + 1}</td>
-				<td class="w-[80%] text-center text-xs">{event.url}</td>
+				<td class="w-[80%] text-start text-xs">{event.url.trim()}</td>
 			</tr>
 		{/each}
 	{/if}
